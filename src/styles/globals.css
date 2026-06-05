@@ -19,12 +19,22 @@
 
 @layer base {
   html {
+    overflow-x: clip;
     scroll-behavior: smooth;
   }
 
   body {
     @apply bg-yac-bg text-yac-white antialiased;
     font-family: var(--font-sans);
+  }
+
+  ::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar:horizontal {
+    height: 0;
   }
 
   ::selection {

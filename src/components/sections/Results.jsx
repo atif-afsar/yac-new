@@ -6,7 +6,7 @@ import { CasesWithInfiniteScroll } from "../ui/cases-with-infinite-scroll";
 
 export default function Results() {
   return (
-    <section id="results" className="relative bg-white py-20 text-neutral-900 md:py-28">
+    <section id="results" className="relative overflow-x-clip bg-white py-20 text-neutral-900 md:py-28">
       <Container>
         <RevealAnimation>
           <SectionHeading

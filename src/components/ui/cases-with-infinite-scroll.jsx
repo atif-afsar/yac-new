@@ -61,7 +61,7 @@ export function CasesWithInfiniteScroll({ results = [] }) {
           <Carousel
             setApi={setApi}
             opts={{ align: "start", loop: false, dragFree: true }}
-            className="w-full"
+            className="w-full overflow-hidden"
           >
             <CarouselContent className="py-1">
               {tiles.map((tile) => (
