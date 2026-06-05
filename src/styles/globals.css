@@ -1,0 +1,39 @@
+/* YAC — Yasir Ali Classes | Global design tokens & base styles */
+
+@theme {
+  /* Brand palette — purple, red, white, golden accents on dark premium bg */
+  --color-yac-bg: #0a0a0f;
+  --color-yac-bg-elevated: #12121a;
+  --color-yac-surface: #1a1a24;
+  --color-yac-purple: #7c3aed;
+  --color-yac-purple-light: #a78bfa;
+  --color-yac-red: #dc2626;
+  --color-yac-red-light: #f87171;
+  --color-yac-gold: #d4af37;
+  --color-yac-gold-light: #f5d76e;
+  --color-yac-white: #fafafa;
+  --color-yac-muted: #a1a1aa;
+
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-yac-bg text-yac-white antialiased;
+    font-family: var(--font-sans);
+  }
+
+  ::selection {
+    @apply bg-yac-purple/40 text-yac-white;
+  }
+}
+
+@layer utilities {
+  .text-gradient-yac {
+    @apply bg-gradient-to-r from-yac-purple-light via-yac-white to-yac-gold-light bg-clip-text text-transparent;
+  }
+}
