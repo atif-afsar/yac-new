@@ -19,13 +19,13 @@
 
 @layer base {
   html {
-    overflow-x: clip;
     scroll-behavior: smooth;
   }
 
   body {
     @apply bg-yac-bg text-yac-white antialiased;
     font-family: var(--font-sans);
+    overflow-x: hidden;
   }
 
   ::-webkit-scrollbar {
@@ -46,4 +46,5 @@
   .text-gradient-yac {
     @apply bg-gradient-to-r from-yac-purple-light via-yac-white to-yac-gold-light bg-clip-text text-transparent;
   }
+
 }
