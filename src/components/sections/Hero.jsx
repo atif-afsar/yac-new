@@ -132,25 +132,56 @@ function generateSquares() {
 
 function ShuffleGrid() {
   const timeoutRef = useRef(null);
+  const gridRef = useRef(null);
   const [squares, setSquares] = useState(() => generateSquares());
 
   useEffect(() => {
-    const shuffleSquares = () => {
-      setSquares(generateSquares());
-      timeoutRef.current = setTimeout(shuffleSquares, 3000);
-    };
+    const element = gridRef.current;
+    if (!element) return;
 
-    shuffleSquares();
+    let isVisible = false;
 
-    return () => {
+    const stop = () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
       }
+    };
+
+    const tick = () => {
+      setSquares(generateSquares());
+      timeoutRef.current = setTimeout(tick, 3000);
+    };
+
+    const start = () => {
+      if (!timeoutRef.current && isVisible && !document.hidden) {
+        timeoutRef.current = setTimeout(tick, 3000);
+      }
+    };
+
+    // Shuffle only while the hero is on screen and the tab is focused.
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+      if (isVisible) start();
+      else stop();
+    });
+    observer.observe(element);
+
+    const onVisibilityChange = () => {
+      if (document.hidden) stop();
+      else start();
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
+    return () => {
+      stop();
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", onVisibilityChange);
     };
   }, []);
 
   return (
-    <div className="relative">
+    <div className="relative" ref={gridRef}>
       <div
         className="grid h-[320px] grid-cols-4 grid-rows-4 gap-1 sm:h-[380px] md:h-[450px]"
         aria-hidden="true"

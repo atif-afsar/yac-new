@@ -22,6 +22,12 @@
     scroll-behavior: smooth;
   }
 
+  /* Lenis owns scroll smoothing — native smooth scrolling would fight it and cause jank */
+  html.lenis,
+  html.lenis body {
+    scroll-behavior: auto;
+  }
+
   body {
     @apply bg-yac-bg text-yac-white antialiased;
     font-family: var(--font-sans);
@@ -47,4 +53,24 @@
     @apply bg-gradient-to-r from-yac-purple-light via-yac-white to-yac-gold-light bg-clip-text text-transparent;
   }
 
+  /* GPU-composited infinite scroll for testimonial columns */
+  .animate-testimonial-scroll {
+    animation: testimonial-scroll-up var(--testimonial-duration, 15s) linear infinite;
+    will-change: transform;
+  }
+}
+
+@keyframes testimonial-scroll-up {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, -50%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-testimonial-scroll {
+    animation: none;
+  }
 }

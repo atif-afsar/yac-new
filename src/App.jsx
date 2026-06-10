@@ -9,11 +9,12 @@ import Results from "./components/sections/Results";
 import WhyChooseUs from "./components/sections/WhyChooseUs";
 import Testimonials from "./components/sections/Testimonials";
 import CTA from "./components/sections/CTA";
+import Contact from "./components/sections/Contact";
 import Footer from "./components/sections/Footer";
 
 function App() {
   return (
-    <ReactLenis root options={{ lerp: 0.08, smoothWheel: true }}>
+    <ReactLenis root options={{ lerp: 0.08, smoothWheel: true, anchors: true }}>
       <div className="relative min-h-screen">
         <ParticleBackground />
 
@@ -27,6 +28,7 @@ function App() {
             <WhyChooseUs />
             <Testimonials />
             <CTA />
+            <Contact />
           </main>
           <Footer />
         </div>

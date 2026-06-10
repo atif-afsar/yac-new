@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "framer-motion";
 import { cn } from "../../lib/utils";
 
 export function TestimonialsColumn({
@@ -9,15 +8,9 @@ export function TestimonialsColumn({
 }) {
   return (
     <div className={className}>
-      <motion.div
-        animate={{ translateY: "-50%" }}
-        transition={{
-          duration,
-          repeat: Infinity,
-          ease: "linear",
-          repeatType: "loop",
-        }}
-        className="flex flex-col gap-6 pb-6"
+      <div
+        className="animate-testimonial-scroll flex flex-col gap-6 pb-6"
+        style={{ "--testimonial-duration": `${duration}s` }}
       >
         {[...new Array(2).fill(0)].map((_, index) => (
           <React.Fragment key={index}>
@@ -26,7 +19,7 @@ export function TestimonialsColumn({
                 key={`${index}-${i}`}
                 className={cn(
                   "w-full max-w-xs rounded-3xl border border-neutral-200/80 bg-white p-8 shadow-sm",
-                  "shadow-yac-red/10 transition-shadow duration-300 hover:shadow-md hover:shadow-yac-red/15"
+                  "shadow-yac-red/10"
                 )}
               >
                 <p className="text-sm leading-relaxed text-neutral-700 sm:text-[15px]">
@@ -38,6 +31,8 @@ export function TestimonialsColumn({
                     height={40}
                     src={image}
                     alt={name}
+                    loading="lazy"
+                    decoding="async"
                     className="h-10 w-10 rounded-full object-cover ring-2 ring-yac-red/15"
                   />
                   <div className="flex flex-col">
@@ -53,7 +48,7 @@ export function TestimonialsColumn({
             ))}
           </React.Fragment>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 }

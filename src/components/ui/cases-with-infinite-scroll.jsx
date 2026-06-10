@@ -4,6 +4,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from "./carousel";
+import { useInViewport } from "../../hooks/useInViewport";
 
 function clamp(n, min, max) {
   return Math.max(min, Math.min(max, n));
@@ -25,12 +26,12 @@ function buildTiles(results, targetCount = 18) {
 
 export function CasesWithInfiniteScroll({ results = [] }) {
   const [api, setApi] = useState();
-  const [current, setCurrent] = useState(0);
+  const [containerRef, isInView] = useInViewport({ rootMargin: "80px" });
 
   const tiles = useMemo(() => buildTiles(results, 18), [results]);
 
   useEffect(() => {
-    if (!api || tiles.length === 0) return;
+    if (!api || tiles.length === 0 || !isInView) return;
 
     const interval = setInterval(() => {
       const snaps = api.scrollSnapList()?.length ?? 0;
@@ -39,19 +40,17 @@ export function CasesWithInfiniteScroll({ results = [] }) {
       const next = clamp(api.selectedScrollSnap() + 1, 0, snaps - 1);
 
       if (next === snaps - 1) {
-        setCurrent(0);
         api.scrollTo(0);
       } else {
         api.scrollNext();
-        setCurrent((c) => c + 1);
       }
     }, 1100);
 
     return () => clearInterval(interval);
-  }, [api, tiles.length, current]);
+  }, [api, tiles.length, isInView]);
 
   return (
-    <div className="w-full py-14 lg:py-24">
+    <div ref={containerRef} className="w-full py-14 lg:py-24">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-10">
           <h2 className="max-w-2xl text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl lg:text-5xl">

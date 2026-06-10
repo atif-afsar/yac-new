@@ -20,6 +20,7 @@ function StickyCard({ course, index, progress, total }) {
           y,
           backgroundColor: course.bg,
           zIndex: index + 1,
+          willChange: "transform",
         }}
         className={cn(
           "relative flex w-full max-w-6xl flex-col overflow-hidden rounded-2xl border border-black/10 shadow-2xl sm:rounded-3xl",
@@ -87,6 +88,8 @@ function StickyCard({ course, index, progress, total }) {
             <img
               src={course.image}
               alt={course.title}
+              loading="lazy"
+              decoding="async"
               className="h-full w-full object-cover"
             />
           </div>

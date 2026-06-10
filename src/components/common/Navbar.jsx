@@ -12,7 +12,7 @@ const navLinks = [
   { label: "Results", href: "#results" },
   { label: "Why Us", href: "#why-choose-us" },
   { label: "Testimonials", href: "#testimonials" },
-  { label: "Contact", href: "#cta" },
+  { label: "Contact", href: "#contact" },
 ];
 
 function NavTabs() {
