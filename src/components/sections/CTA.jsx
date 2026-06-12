@@ -31,7 +31,7 @@ export default function CTA() {
 
       <Container className="relative z-10">
         <div className="overflow-hidden rounded-3xl border border-neutral-200/80 bg-white">
-          <div className="grid min-h-[520px] md:min-h-[620px] md:grid-cols-2">
+          <div className="grid md:min-h-[620px] md:grid-cols-2">
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -97,11 +97,15 @@ export default function CTA() {
               </div>
             </motion.div>
 
-            <div className="relative min-h-[320px] md:min-h-full">
-              <InteractiveRobotSpline
-                scene={ROBOT_SCENE_URL}
-                className="absolute inset-0 h-full w-full"
-              />
+            <div className="relative h-[280px] overflow-hidden sm:h-[340px] md:h-auto md:min-h-full">
+              <div className="absolute inset-0 flex items-end justify-center md:items-center">
+                <div className="h-[125%] w-full origin-bottom scale-[0.82] sm:scale-90 md:h-full md:scale-100">
+                  <InteractiveRobotSpline
+                    scene={ROBOT_SCENE_URL}
+                    className="h-full w-full"
+                  />
+                </div>
+              </div>
               <div
                 aria-hidden
                 className="pointer-events-none absolute inset-y-0 left-0 hidden w-12 bg-gradient-to-r from-white to-transparent md:block"

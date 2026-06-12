@@ -121,7 +121,7 @@ export default function CoursesStackSection() {
   return (
     <section
       ref={containerRef}
-      className="relative bg-white"
+      className="relative w-full overflow-x-clip bg-white"
       style={{ height: `${total * 100}vh` }}
     >
       {stackCourses.map((course, index) => (

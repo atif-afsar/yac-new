@@ -1,7 +1,8 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronRight } from "lucide-react";
 import Container from "./Container";
+import Logo from "./Logo";
 
 const cx = (...classes) => classes.filter(Boolean).join(" ");
 
@@ -116,20 +117,144 @@ function NavCursor({ position }) {
   );
 }
 
+function MobileSidebar({ open, onClose }) {
+  // Lock page scroll while the sidebar is open
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open, onClose]);
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[60] bg-zinc-900/45 backdrop-blur-[2px] md:hidden"
+            onClick={onClose}
+            aria-hidden="true"
+          />
+
+          <motion.aside
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", bounce: 0, duration: 0.4 }}
+            className={cx(
+              "fixed right-0 top-0 z-[70] flex h-dvh w-[78vw] max-w-xs flex-col",
+              "border-l border-zinc-200 bg-white shadow-2xl md:hidden"
+            )}
+            data-lenis-prevent
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile navigation"
+          >
+            <div className="flex items-center justify-between border-b border-zinc-200/80 px-4 py-4">
+              <div className="flex items-center gap-2.5">
+                <Logo size="md" />
+                <span className="flex min-w-0 flex-col">
+                  <span className="text-[10px] font-semibold uppercase tracking-wide text-zinc-500">
+                    Yasir Ali Classes
+                  </span>
+                  <span className="text-sm font-bold leading-tight text-zinc-900">
+                    Aligarh
+                  </span>
+                </span>
+              </div>
+              <button
+                type="button"
+                className={cx(
+                  "rounded-lg border border-zinc-200 bg-white p-2 text-zinc-600",
+                  "transition-colors hover:bg-zinc-100 hover:text-zinc-900",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yac-red"
+                )}
+                aria-label="Close menu"
+                onClick={onClose}
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <nav className="flex-1 overflow-y-auto px-3 py-4" aria-label="Mobile">
+              <ul className="flex flex-col gap-1">
+                {navLinks.map((link, index) => (
+                  <motion.li
+                    key={link.href}
+                    initial={{ opacity: 0, x: 16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.05 + index * 0.04, duration: 0.25 }}
+                  >
+                    <a
+                      href={link.href}
+                      className={cx(
+                        "flex items-center justify-between rounded-xl px-3.5 py-3",
+                        "text-sm font-semibold text-zinc-800",
+                        "transition-colors hover:bg-zinc-50 hover:text-yac-red active:bg-zinc-100"
+                      )}
+                      onClick={onClose}
+                    >
+                      {link.label}
+                      <ChevronRight className="h-4 w-4 text-zinc-300" aria-hidden="true" />
+                    </a>
+                  </motion.li>
+                ))}
+              </ul>
+            </nav>
+
+            <div className="border-t border-zinc-200/80 p-4">
+              <a
+                href="#cta"
+                className={cx(
+                  "flex w-full items-center justify-center rounded-xl px-5 py-3.5",
+                  "text-sm font-semibold text-white bg-yac-red",
+                  "shadow-[0_4px_14px_rgba(220,38,38,0.35)]",
+                  "transition-all hover:bg-yac-red/90 active:scale-[0.98]"
+                )}
+                onClick={onClose}
+              >
+                Join Now
+              </a>
+              <p className="mt-3 text-center text-[11px] font-medium text-zinc-400">
+                Commerce &amp; Entrance Coaching, Aligarh
+              </p>
+            </div>
+          </motion.aside>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}
+
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <header
       className={cx(
-        "fixed top-0 left-0 right-0 z-50",
-        "border-b border-zinc-200/80 bg-white/90 backdrop-blur-md",
+        "fixed inset-x-0 top-0 z-50 w-full max-w-[100vw]",
+        "border-b border-zinc-200 bg-white",
         "shadow-sm"
       )}
     >
-      <Container>
+      <Container className="max-w-full">
         <nav
-          className="flex h-16 items-center justify-between gap-3 md:gap-5 lg:gap-6"
+          className="flex h-16 w-full items-center gap-3 md:gap-5 lg:gap-6"
           aria-label="Main navigation"
         >
           <a
@@ -137,9 +262,7 @@ export default function Navbar() {
             className="flex shrink-0 items-center gap-2.5"
             onClick={() => setMobileOpen(false)}
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-yac-red text-sm font-bold tracking-tight text-white">
-              YAC
-            </span>
+            <Logo size="md" />
             <span className="hidden min-w-0 flex-col sm:flex">
               <span className="text-[10px] font-semibold uppercase tracking-wide text-zinc-500">
                 Yasir Ali Classes
@@ -150,7 +273,9 @@ export default function Navbar() {
             </span>
           </a>
 
-          <NavTabs />
+          <div className="hidden min-w-0 flex-1 md:block">
+            <NavTabs />
+          </div>
 
           <div className="hidden shrink-0 md:ml-1 md:block">
             <a
@@ -171,64 +296,21 @@ export default function Navbar() {
           <button
             type="button"
             className={cx(
-              "rounded-lg p-2 text-zinc-600 transition-colors md:hidden",
-              "hover:bg-zinc-100 hover:text-zinc-900",
+              "ml-auto inline-flex shrink-0 items-center justify-center rounded-lg md:hidden",
+              "border border-zinc-200 bg-white p-2 text-zinc-700 shadow-sm",
+              "transition-colors hover:bg-zinc-100 hover:text-zinc-900",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yac-red"
             )}
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-label="Open menu"
             aria-expanded={mobileOpen}
-            onClick={() => setMobileOpen((open) => !open)}
+            onClick={() => setMobileOpen(true)}
           >
-            {mobileOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
+            <Menu className="h-6 w-6" />
           </button>
         </nav>
       </Container>
 
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="overflow-hidden border-t border-zinc-200/80 bg-white md:hidden"
-          >
-            <Container className="py-4">
-              <ul className="flex flex-col gap-1">
-                {navLinks.map((link) => (
-                  <li key={link.href}>
-                    <a
-                      href={link.href}
-                      className={cx(
-                        "block rounded-lg px-3 py-2.5 text-sm font-semibold text-zinc-800",
-                        "transition-colors hover:bg-zinc-50 hover:text-yac-red"
-                      )}
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-              <a
-                href="#cta"
-                className={cx(
-                  "mt-4 flex w-full items-center justify-center rounded-lg px-5 py-3",
-                  "text-sm font-semibold text-white bg-yac-red",
-                  "transition-all hover:bg-yac-red/90 active:scale-[0.98]"
-                )}
-                onClick={() => setMobileOpen(false)}
-              >
-                Join Now
-              </a>
-            </Container>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <MobileSidebar open={mobileOpen} onClose={() => setMobileOpen(false)} />
     </header>
   );
 }

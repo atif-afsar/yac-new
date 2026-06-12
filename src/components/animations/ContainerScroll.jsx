@@ -27,7 +27,7 @@ export function ContainerScroll({ titleComponent, children }) {
     <div
       ref={containerRef}
       className={cx(
-        "relative flex items-center justify-center px-3 sm:px-4 md:px-6",
+        "relative flex items-center justify-center overflow-x-clip px-3 sm:px-4 md:px-6",
         "h-[46rem] sm:h-[54rem] md:h-[68rem] lg:h-[74rem]"
       )}
     >

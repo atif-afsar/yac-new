@@ -1,6 +1,7 @@
 import { ArrowUpRight, Clock, Mail, MapPin, Phone } from "lucide-react";
 import { FaFacebook, FaInstagram, FaWhatsapp, FaYoutube } from "react-icons/fa";
 import Container from "../common/Container";
+import Logo from "../common/Logo";
 import { cn } from "../../lib/utils";
 
 const quickLinks = [
@@ -53,7 +54,7 @@ function FooterLink({ href, children }) {
   return (
     <a
       href={href}
-      className="group inline-flex items-center gap-1 text-sm text-neutral-400 transition-colors hover:text-yac-red-light"
+      className="group inline-flex items-center gap-1 text-sm text-neutral-600 transition-colors hover:text-yac-red"
     >
       {children}
       <ArrowUpRight
@@ -66,29 +67,29 @@ function FooterLink({ href, children }) {
 
 export default function Footer() {
   return (
-    <footer className="relative overflow-hidden bg-zinc-950 text-neutral-300">
+    <footer className="relative overflow-hidden border-t border-zinc-200 bg-white text-neutral-700">
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-32 top-0 h-64 w-64 rounded-full bg-yac-red/10 blur-3xl"
+        className="pointer-events-none absolute -left-32 top-0 h-64 w-64 rounded-full bg-yac-red/5 blur-3xl"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-32 bottom-0 h-64 w-64 rounded-full bg-yac-purple/10 blur-3xl"
+        className="pointer-events-none absolute -right-32 bottom-0 h-64 w-64 rounded-full bg-yac-purple/5 blur-3xl"
       />
 
       <Container className="relative z-10">
         {/* Top CTA strip */}
-        <div className="border-b border-white/10 py-10 md:py-12">
+        <div className="border-b border-zinc-200 py-10 md:py-12">
           <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-yac-red-light">
+              <p className="text-xs font-semibold uppercase tracking-wider text-yac-red">
                 Admissions Open
               </p>
-              <h2 className="mt-2 text-2xl font-bold text-white sm:text-3xl">
+              <h2 className="mt-2 text-2xl font-bold text-neutral-900 sm:text-3xl">
                 Ready to start your journey with{" "}
-                <span className="text-yac-red-light">YAC</span>?
+                <span className="text-yac-red">YAC</span>?
               </h2>
-              <p className="mt-2 max-w-lg text-sm text-neutral-400">
+              <p className="mt-2 max-w-lg text-sm text-neutral-600">
                 Join thousands of students and parents who trust Yasir Ali
                 Classes for result-oriented coaching in Aligarh.
               </p>
@@ -98,10 +99,10 @@ export default function Footer() {
               className={cn(
                 "inline-flex shrink-0 items-center justify-center rounded-xl px-6 py-3",
                 "text-sm font-semibold text-white",
-                "bg-yac-red shadow-[0_4px_14px_rgba(220,38,38,0.4)]",
-                "transition-all hover:bg-yac-red-light hover:shadow-[0_4px_20px_rgba(220,38,38,0.5)]",
+                "bg-yac-red shadow-[0_4px_14px_rgba(220,38,38,0.35)]",
+                "transition-all hover:bg-yac-red/90 hover:shadow-[0_4px_20px_rgba(220,38,38,0.45)]",
                 "active:scale-[0.98]",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yac-red focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yac-red focus-visible:ring-offset-2"
               )}
             >
               Enquire Now
@@ -114,19 +115,17 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:col-span-4">
             <a href="#hero" className="inline-flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-yac-red text-sm font-bold tracking-tight text-white">
-                YAC
-              </span>
+              <Logo size="lg" />
               <span className="flex flex-col">
                 <span className="text-[10px] font-semibold uppercase tracking-wide text-neutral-500">
                   Yasir Ali Classes
                 </span>
-                <span className="text-sm font-bold leading-tight text-white">
+                <span className="text-sm font-bold leading-tight text-neutral-900">
                   Aligarh
                 </span>
               </span>
             </a>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-neutral-400">
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-neutral-600">
               Premium coaching for school boards, university programs, and
               entrance exams — trusted by students and parents across Aligarh
               for over a decade.
@@ -140,7 +139,7 @@ export default function Footer() {
                   aria-label={label}
                   className={cn(
                     "inline-flex size-10 items-center justify-center rounded-xl",
-                    "border border-white/10 bg-white/5 text-neutral-400",
+                    "border border-zinc-200 bg-zinc-50 text-neutral-500",
                     "transition-all duration-300",
                     hover
                   )}
@@ -153,7 +152,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div className="lg:col-span-2">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-neutral-900">
               Quick Links
             </h3>
             <ul className="mt-4 flex flex-col gap-3">
@@ -167,7 +166,7 @@ export default function Footer() {
 
           {/* Courses */}
           <div className="lg:col-span-3">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-neutral-900">
               Our Courses
             </h3>
             <ul className="mt-4 flex flex-col gap-3">
@@ -181,56 +180,56 @@ export default function Footer() {
 
           {/* Contact */}
           <div className="lg:col-span-3">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-neutral-900">
               Get in Touch
             </h3>
             <ul className="mt-4 flex flex-col gap-4">
               <li className="flex items-start gap-3">
-                <span className="mt-0.5 inline-flex rounded-lg bg-yac-red/15 p-2 text-yac-red-light">
+                <span className="mt-0.5 inline-flex rounded-lg bg-yac-red/10 p-2 text-yac-red">
                   <MapPin className="size-4" aria-hidden />
                 </span>
                 <div>
                   <p className="text-xs font-medium text-neutral-500">Address</p>
-                  <p className="mt-0.5 text-sm text-neutral-300">
+                  <p className="mt-0.5 text-sm text-neutral-700">
                     Yasir Ali Classes, Aligarh, Uttar Pradesh
                   </p>
                 </div>
               </li>
               <li className="flex items-start gap-3">
-                <span className="mt-0.5 inline-flex rounded-lg bg-yac-red/15 p-2 text-yac-red-light">
+                <span className="mt-0.5 inline-flex rounded-lg bg-yac-red/10 p-2 text-yac-red">
                   <Phone className="size-4" aria-hidden />
                 </span>
                 <div>
                   <p className="text-xs font-medium text-neutral-500">Phone</p>
                   <a
                     href="tel:+910000000000"
-                    className="mt-0.5 block text-sm text-neutral-300 transition-colors hover:text-yac-red-light"
+                    className="mt-0.5 block text-sm text-neutral-700 transition-colors hover:text-yac-red"
                   >
                     +91 XXXXX XXXXX
                   </a>
                 </div>
               </li>
               <li className="flex items-start gap-3">
-                <span className="mt-0.5 inline-flex rounded-lg bg-yac-red/15 p-2 text-yac-red-light">
+                <span className="mt-0.5 inline-flex rounded-lg bg-yac-red/10 p-2 text-yac-red">
                   <Mail className="size-4" aria-hidden />
                 </span>
                 <div>
                   <p className="text-xs font-medium text-neutral-500">Email</p>
                   <a
                     href="mailto:contact@yasiraliclasses.com"
-                    className="mt-0.5 block text-sm text-neutral-300 transition-colors hover:text-yac-red-light"
+                    className="mt-0.5 block text-sm text-neutral-700 transition-colors hover:text-yac-red"
                   >
                     contact@yasiraliclasses.com
                   </a>
                 </div>
               </li>
               <li className="flex items-start gap-3">
-                <span className="mt-0.5 inline-flex rounded-lg bg-yac-red/15 p-2 text-yac-red-light">
+                <span className="mt-0.5 inline-flex rounded-lg bg-yac-red/10 p-2 text-yac-red">
                   <Clock className="size-4" aria-hidden />
                 </span>
                 <div>
                   <p className="text-xs font-medium text-neutral-500">Hours</p>
-                  <p className="mt-0.5 text-sm text-neutral-300">
+                  <p className="mt-0.5 text-sm text-neutral-700">
                     Mon – Sat, 8:00 AM – 7:00 PM
                   </p>
                 </div>
@@ -240,32 +239,26 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 py-6 text-center sm:flex-row sm:text-left">
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-zinc-200 py-6 text-center sm:flex-row sm:text-left">
           <p className="text-xs text-neutral-500">
             © {new Date().getFullYear()} Yasir Ali Classes. All rights reserved.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-neutral-500">
-            <a
-              href="#"
-              className="transition-colors hover:text-neutral-300"
-            >
+            <a href="#" className="transition-colors hover:text-neutral-900">
               Privacy Policy
             </a>
-            <span className="hidden text-neutral-700 sm:inline" aria-hidden>
+            <span className="hidden text-neutral-300 sm:inline" aria-hidden>
               ·
             </span>
-            <a
-              href="#"
-              className="transition-colors hover:text-neutral-300"
-            >
+            <a href="#" className="transition-colors hover:text-neutral-900">
               Terms of Service
             </a>
-            <span className="hidden text-neutral-700 sm:inline" aria-hidden>
+            <span className="hidden text-neutral-300 sm:inline" aria-hidden>
               ·
             </span>
             <a
               href="#contact"
-              className="transition-colors hover:text-yac-red-light"
+              className="transition-colors hover:text-yac-red"
             >
               Contact Support
             </a>

@@ -6,14 +6,14 @@ import { CasesWithInfiniteScroll } from "../ui/cases-with-infinite-scroll";
 
 export default function Results() {
   return (
-    <section id="results" className="relative overflow-x-clip bg-white py-20 text-neutral-900 md:py-28">
+    <section id="results" className="relative overflow-x-clip bg-white py-10 text-neutral-900 sm:py-20 md:py-28">
       <Container>
-        <RevealAnimation>
+        <RevealAnimation className="mb-0">
           <SectionHeading
             variant="light"
             label="Our Results"
             title="Result-Oriented Success"
-            description="A quick look at achievements and selections — auto-scrolling for an at-a-glance view."
+            description="AMU Entrance 2026 selections across B.Com, B.A., B.A. Honours, B.A. FL and BBA — swipe to view our students' results."
           />
         </RevealAnimation>
         <CasesWithInfiniteScroll results={results} />

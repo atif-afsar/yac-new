@@ -14,26 +14,28 @@ import Footer from "./components/sections/Footer";
 
 function App() {
   return (
-    <ReactLenis root options={{ lerp: 0.08, smoothWheel: true, anchors: true }}>
-      <div className="relative min-h-screen">
-        <ParticleBackground />
+    <>
+      <Navbar />
+      <ReactLenis root options={{ lerp: 0.08, smoothWheel: true, anchors: true }}>
+        <div className="relative min-h-screen w-full overflow-x-clip">
+          <ParticleBackground />
 
-        <div className="relative z-10">
-          <Navbar />
-          <main>
-            <Hero />
-            <About />
-            <Courses />
-            <Results />
-            <WhyChooseUs />
-            <Testimonials />
-            <CTA />
-            <Contact />
-          </main>
-          <Footer />
+          <div className="relative z-10 w-full overflow-x-clip">
+            <main className="w-full overflow-x-clip">
+              <Hero />
+              <About />
+              <Courses />
+              <Results />
+              <WhyChooseUs />
+              <Testimonials />
+              <CTA />
+              <Contact />
+            </main>
+            <Footer />
+          </div>
         </div>
-      </div>
-    </ReactLenis>
+      </ReactLenis>
+    </>
   );
 }
 

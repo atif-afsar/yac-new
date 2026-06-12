@@ -6,8 +6,8 @@ import CoursesStackSection from "./CoursesStackSection";
 export default function Courses() {
   return (
     <>
-      <div id="courses" className="relative bg-white text-neutral-900">
-        <div className="relative py-20 md:py-28">
+      <div id="courses" className="relative w-full overflow-x-clip bg-white text-neutral-900">
+        <div className="relative overflow-x-clip py-20 md:py-28">
           <div
             aria-hidden
             className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-yac-red/10 blur-3xl"

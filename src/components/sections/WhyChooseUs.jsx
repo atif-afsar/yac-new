@@ -9,8 +9,8 @@ import {
 import Container from "../common/Container";
 import SectionHeading from "../common/SectionHeading";
 import RevealAnimation from "../animations/RevealAnimation";
+import { GlowCard } from "../ui/spotlight-card";
 import { whyChooseUsCards } from "../../data/whyChooseUs";
-import { cn } from "../../lib/utils";
 
 const iconMap = {
   "graduation-cap": GraduationCap,
@@ -50,24 +50,29 @@ export default function WhyChooseUs() {
         <ul className="mt-8 grid min-w-0 gap-4 sm:mt-12 sm:grid-cols-2 sm:gap-5 lg:mt-16 lg:grid-cols-3 lg:gap-6">
           {whyChooseUsCards.map((card, index) => {
             const Icon = iconMap[card.icon] ?? GraduationCap;
+            const glowColor = index % 3 === 1 ? "orange" : "red";
 
             return (
               <RevealAnimation key={card.id} delay={0.05 * index}>
-                <li
-                  className={cn(
-                    "group h-full rounded-2xl border border-neutral-200/80 bg-white p-5 shadow-sm",
-                    "transition-all duration-300 hover:border-yac-red/30 hover:shadow-md sm:p-6"
-                  )}
-                >
-                  <div className="mb-4 inline-flex rounded-xl bg-yac-red/10 p-3 text-yac-red transition-colors group-hover:bg-yac-red group-hover:text-white">
-                    <Icon className="size-5 sm:size-6" aria-hidden />
-                  </div>
-                  <h3 className="text-base font-bold text-neutral-900 sm:text-lg">
-                    {card.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-neutral-600 sm:text-[15px]">
-                    {card.description}
-                  </p>
+                <li className="h-full">
+                  <GlowCard
+                    customSize
+                    variant="light"
+                    glowColor={glowColor}
+                    className="group shadow-sm transition-shadow duration-300 hover:shadow-md"
+                  >
+                    <div className="relative z-[1] flex h-full flex-col">
+                      <div className="mb-4 inline-flex w-fit rounded-xl bg-yac-red/10 p-3 text-yac-red transition-colors group-hover:bg-yac-red group-hover:text-white">
+                        <Icon className="size-5 sm:size-6" aria-hidden />
+                      </div>
+                      <h3 className="text-base font-bold text-neutral-900 sm:text-lg">
+                        {card.title}
+                      </h3>
+                      <p className="mt-2 text-sm leading-relaxed text-neutral-600 sm:text-[15px]">
+                        {card.description}
+                      </p>
+                    </div>
+                  </GlowCard>
                 </li>
               </RevealAnimation>
             );

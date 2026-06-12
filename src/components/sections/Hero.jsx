@@ -1,6 +1,7 @@
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import Container from "../common/Container";
+import Logo from "../common/Logo";
 
 const cx = (...classes) => classes.filter(Boolean).join(" ");
 
@@ -18,122 +19,111 @@ const shuffle = (array) => {
 };
 
 const squareData = [
-  {
-    id: 1,
-    src: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=600&q=80",
-    alt: "Graduation ceremony",
-  },
-  {
-    id: 2,
-    src: "https://images.unsplash.com/photo-1427504492585-7158c1399e86?auto=format&fit=crop&w=600&q=80",
-    alt: "Classroom with desks",
-  },
-  {
-    id: 3,
-    src: "https://images.unsplash.com/photo-1503676260728-1c00da094a0e?auto=format&fit=crop&w=600&q=80",
-    alt: "Books and learning materials",
-  },
-  {
-    id: 4,
-    src: "https://images.unsplash.com/photo-1523240795612-9a054d0db644?auto=format&fit=crop&w=600&q=80",
-    alt: "Students on campus",
-  },
-  {
-    id: 5,
-    src: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=600&q=80",
-    alt: "Lecture hall",
-  },
-  {
-    id: 6,
-    src: "https://images.unsplash.com/photo-1434030214721-ab48d1a09d6f?auto=format&fit=crop&w=600&q=80",
-    alt: "Student taking notes",
-  },
-  {
-    id: 7,
-    src: "https://images.unsplash.com/photo-1488190217585-6cd000e9453f?auto=format&fit=crop&w=600&q=80",
-    alt: "Studying with laptop",
-  },
-  {
-    id: 8,
-    src: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=80",
-    alt: "Group study session",
-  },
-  {
-    id: 9,
-    src: "https://images.unsplash.com/photo-1516321318423-f06f8e86b1a5?auto=format&fit=crop&w=600&q=80",
-    alt: "Online learning setup",
-  },
-  {
-    id: 10,
-    src: "https://images.unsplash.com/photo-1509062522246-3755597927d8?auto=format&fit=crop&w=600&q=80",
-    alt: "Teacher in classroom",
-  },
-  {
-    id: 11,
-    src: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=600&q=80",
-    alt: "Students collaborating",
-  },
-  {
-    id: 12,
-    src: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=600&q=80",
-    alt: "Library shelves",
-  },
-  {
-    id: 13,
-    src: "https://images.unsplash.com/photo-1497633767063-fcb29cf60a21?auto=format&fit=crop&w=600&q=80",
-    alt: "Open books",
-  },
-  {
-    id: 14,
-    src: "https://images.unsplash.com/photo-1524999349-27308-ea8133140f8d?auto=format&fit=crop&w=600&q=80",
-    alt: "Exam preparation",
-  },
-  {
-    id: 15,
-    src: "https://images.unsplash.com/photo-1606761568499-6d24583b30c2?auto=format&fit=crop&w=600&q=80",
-    alt: "Remote coaching class",
-  },
-  {
-    id: 16,
-    src: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=600&q=80",
-    alt: "Mentorship discussion",
-  },
+  { id: 1, src: "/Images/Hero/img1.webp", alt: "Yasir Ali Classes — student success" },
+  { id: 2, src: "/Images/Hero/img2.webp", alt: "Yasir Ali Classes — classroom session" },
+  { id: 3, src: "/Images/Hero/img3.webp", alt: "Yasir Ali Classes — coaching in action" },
+  { id: 4, src: "/Images/Hero/img4.webp", alt: "Yasir Ali Classes — learning environment" },
+  { id: 5, src: "/Images/Hero/img5.webp", alt: "Yasir Ali Classes — students studying" },
+  { id: 6, src: "/Images/Hero/commerce.webp", alt: "Commerce coaching at Yasir Ali Classes" },
+  { id: 7, src: "/Images/Hero/entrance.webp", alt: "Entrance exam preparation at YAC" },
+  { id: 8, src: "/Images/Hero/regular.webp", alt: "Regular classes at Yasir Ali Classes" },
+  { id: 9, src: "/Images/Hero/science.webp", alt: "Science coaching at Yasir Ali Classes" },
+  { id: 10, src: "/Images/Hero/1.jpg", alt: "Yasir Ali Classes Aligarh campus" },
+  { id: 11, src: "/Images/Hero/2.jpg", alt: "Students at Yasir Ali Classes" },
+  { id: 12, src: "/Images/Hero/3.jpg", alt: "YAC classroom moments" },
+  { id: 13, src: "/Images/Hero/4.jpg", alt: "YAC faculty and students" },
+  { id: 14, src: "/Images/Hero/5.jpg", alt: "Yasir Ali Classes batch" },
+  { id: 15, src: "/Images/Hero/6.jpg", alt: "Coaching session at YAC Aligarh" },
+  { id: 16, src: "/Images/Hero/7.jpg", alt: "YAC students group photo" },
+  { id: 17, src: "/Images/Hero/8.jpg", alt: "Yasir Ali Classes celebration" },
 ];
 
 const stats = [
-  { value: "12+", label: "Years Trust" },
-  { value: "100K+", label: "YouTube Family" },
-  { value: "20K+", label: "App Downloads" },
-  { value: "1200+", label: "Students Enrolled" },
+  { end: 10, suffix: "+", label: "Years Trust" },
+  { end: 100, suffix: "K+", label: "YouTube Family" },
+  { end: 20, suffix: "K+", label: "App Downloads" },
+  { end: 1200, suffix: "+", label: "Students Enrolled" },
 ];
 
-function generateSquares() {
-  return shuffle(squareData).map((sq) => (
-    <motion.div
-      key={sq.id}
-      layout
-      transition={{ duration: 1.5, type: "spring" }}
-      className="relative h-full w-full overflow-hidden rounded-md border border-zinc-900/10 shadow-[3px_3px_0_0_rgba(24,24,27,0.25)]"
-      role="img"
-      aria-label={sq.alt}
-    >
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${sq.src})` }}
-      />
-      <div className="absolute inset-0 bg-yac-red/15 mix-blend-multiply" aria-hidden="true" />
-      <div
-        className="absolute inset-0 bg-gradient-to-t from-zinc-900/25 to-transparent"
-        aria-hidden="true"
-      />
-    </motion.div>
-  ));
+function AnimatedCounter({ end, suffix, duration = 1.8 }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-40px" });
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!isInView) return;
+
+    let frameId;
+    const startTime = performance.now();
+
+    const tick = (now) => {
+      const progress = Math.min((now - startTime) / (duration * 1000), 1);
+      const eased = 1 - (1 - progress) ** 3;
+      setCount(Math.round(eased * end));
+      if (progress < 1) frameId = requestAnimationFrame(tick);
+    };
+
+    frameId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frameId);
+  }, [isInView, end, duration]);
+
+  return (
+    <span ref={ref}>
+      {count}
+      {suffix}
+    </span>
+  );
+}
+
+function generateSquares(count = 16) {
+  return shuffle(squareData)
+    .slice(0, count)
+    .map((sq) => (
+      <motion.div
+        key={sq.id}
+        layout
+        transition={{ duration: 1.5, type: "spring" }}
+        className="relative h-full w-full overflow-hidden rounded-lg border border-zinc-900/10 md:rounded-md md:shadow-[3px_3px_0_0_rgba(24,24,27,0.25)]"
+      >
+        <img
+          src={sq.src}
+          alt={sq.alt}
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-yac-red/15 mix-blend-multiply" aria-hidden="true" />
+        <div
+          className="absolute inset-0 bg-gradient-to-t from-zinc-900/25 to-transparent"
+          aria-hidden="true"
+        />
+      </motion.div>
+    ));
+}
+
+function useGridSize() {
+  const [gridSize, setGridSize] = useState(9);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const update = () => setGridSize(mq.matches ? 16 : 9);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  return gridSize;
 }
 
 function ShuffleGrid() {
   const timeoutRef = useRef(null);
   const gridRef = useRef(null);
-  const [squares, setSquares] = useState(() => generateSquares());
+  const gridSize = useGridSize();
+  const [squares, setSquares] = useState(() => generateSquares(9));
+
+  useEffect(() => {
+    setSquares(generateSquares(gridSize));
+  }, [gridSize]);
 
   useEffect(() => {
     const element = gridRef.current;
@@ -149,7 +139,7 @@ function ShuffleGrid() {
     };
 
     const tick = () => {
-      setSquares(generateSquares());
+      setSquares(generateSquares(gridSize));
       timeoutRef.current = setTimeout(tick, 3000);
     };
 
@@ -159,7 +149,6 @@ function ShuffleGrid() {
       }
     };
 
-    // Shuffle only while the hero is on screen and the tab is focused.
     const observer = new IntersectionObserver(([entry]) => {
       isVisible = entry.isIntersecting;
       if (isVisible) start();
@@ -178,29 +167,38 @@ function ShuffleGrid() {
       observer.disconnect();
       document.removeEventListener("visibilitychange", onVisibilityChange);
     };
-  }, []);
+  }, [gridSize]);
 
   return (
-    <div className="relative" ref={gridRef}>
+    <div className="relative w-full" ref={gridRef}>
       <div
-        className="grid h-[320px] grid-cols-4 grid-rows-4 gap-1 sm:h-[380px] md:h-[450px]"
-        aria-hidden="true"
+        className={cx(
+          "overflow-hidden rounded-2xl border border-zinc-200/80 bg-zinc-50 p-1.5",
+          "shadow-[0_8px_30px_rgba(24,24,27,0.08)] md:rounded-none md:border-0 md:bg-transparent md:p-0 md:shadow-none"
+        )}
       >
-        {squares.map((sq) => sq)}
+        <div
+          className={cx(
+            "grid gap-1",
+            "grid-cols-3 grid-rows-3 h-[220px] min-[375px]:h-[250px]",
+            "md:grid-cols-4 md:grid-rows-4 md:h-[450px] md:gap-1"
+          )}
+          aria-hidden="true"
+        >
+          {squares.map((sq) => sq)}
+        </div>
       </div>
 
       <div
         className={cx(
-          "absolute -left-3 -top-3 z-10 flex items-center gap-2 rounded-xl",
-          "border border-zinc-200 bg-white px-3 py-2",
-          "shadow-[4px_4px_0_0_rgba(24,24,27,0.12)] sm:-left-5 sm:-top-5 sm:px-4 sm:py-3"
+          "absolute -left-3 -top-3 z-10 hidden items-center gap-2 rounded-xl sm:flex",
+          "border border-zinc-200 bg-white px-4 py-3",
+          "shadow-[4px_4px_0_0_rgba(24,24,27,0.12)] md:-left-5 md:-top-5"
         )}
         aria-label="Yasir Ali Classes logo"
       >
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-yac-red text-sm font-bold tracking-tight text-white sm:h-11 sm:w-11 sm:text-base">
-          YAC
-        </div>
-        <div className="hidden min-w-0 sm:block">
+        <Logo size="md" className="h-11 w-11" />
+        <div className="min-w-0">
           <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
             Yasir Ali Classes
           </p>
@@ -211,12 +209,18 @@ function ShuffleGrid() {
   );
 }
 
+const fadeUp = {
+  initial: { opacity: 0, y: 16 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+};
+
 export default function Hero() {
   return (
     <section
       id="hero"
       className={cx(
-        "relative overflow-hidden pt-16 md:pt-[4.5rem]",
+        "relative overflow-x-clip pt-16 md:pt-[4.5rem]",
         "bg-gradient-to-b from-white via-zinc-50/90 to-white",
         "text-zinc-900"
       )}
@@ -226,42 +230,51 @@ export default function Hero() {
         aria-hidden="true"
       />
 
-      <Container className="relative z-10 pt-4 pb-10 md:pt-6 md:pb-12 lg:pt-8 lg:pb-14">
-        <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-2 md:gap-12 lg:gap-16">
-          <div className="order-1 max-w-xl md:order-1">
-            <span
+      <Container className="relative z-10 pb-10 pt-5 md:pb-12 md:pt-6 lg:pb-14 lg:pt-8">
+        <div className="grid grid-cols-1 items-center gap-6 md:grid-cols-2 md:gap-12 lg:gap-16">
+          <div className="order-1 min-w-0 w-full max-w-xl text-center md:text-left">
+            <motion.span
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: 0.05 }}
               className={cx(
-                "mb-4 inline-flex items-center gap-2 rounded-full border border-yac-red/20",
-                "bg-yac-red/5 px-3 py-1 text-xs font-semibold text-yac-red md:text-sm"
+                "mb-3 inline-flex items-center gap-2 rounded-full md:mb-4",
+                "border border-yac-red/20 bg-yac-red/5 px-3 py-1",
+                "text-[11px] font-semibold text-yac-red min-[375px]:text-xs md:text-sm"
               )}
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-yac-red" aria-hidden="true" />
-              Yasir Ali Classes — A Trusted Name
-            </span>
+              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-yac-red" aria-hidden="true" />
+              <span className="md:hidden">Trusted Coaching in Aligarh</span>
+              <span className="hidden md:inline">Yasir Ali Classes — A Trusted Name</span>
+            </motion.span>
 
-            <h1 className="text-3xl font-bold leading-tight tracking-tight text-zinc-900 sm:text-4xl lg:text-5xl xl:text-[3.25rem]">
+            <motion.h1
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: 0.1 }}
+              className="text-balance text-[1.65rem] font-bold leading-[1.2] tracking-tight text-zinc-900 min-[375px]:text-3xl sm:text-4xl lg:text-5xl xl:text-[3.25rem]"
+            >
               Best Commerce &amp; Entrance Coaching in{" "}
-              <span className="relative inline-block">
-                Aligarh
-                <span
-                  className="absolute -bottom-1 left-0 h-1 w-full rounded-full bg-yac-red/80"
-                  aria-hidden="true"
-                />
-              </span>
-            </h1>
+              <span className="text-yac-red">Aligarh</span>
+            </motion.h1>
 
-            <p className="mt-5 text-base leading-relaxed text-zinc-600 md:mt-6 md:text-lg">
-              Prepare for Class 11–12, AMU, JMI, CUET, Foundation, Commerce,
-              Humanities &amp; Management with expert guidance, live classes, test
-              series and personal mentorship.
-            </p>
+            <motion.p
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: 0.15 }}
+              className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-zinc-600 min-[375px]:mt-4 min-[375px]:text-[15px] md:mx-0 md:mt-6 md:max-w-none md:text-lg"
+            >
+              Class 11–12, AMU, JMI, CUET, Foundation, Commerce &amp; Humanities
+              — expert guidance, live classes &amp; personal mentorship.
+            </motion.p>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <motion.div
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: 0.2 }}
+              className="mt-5 flex flex-col gap-2.5 min-[375px]:mt-6 md:mt-8 md:flex-row md:items-center md:gap-3"
+            >
               <a
                 href="#cta"
                 className={cx(
-                  "inline-flex items-center justify-center rounded-lg px-6 py-3",
-                  "text-center text-sm font-semibold text-white md:text-base",
+                  "inline-flex items-center justify-center rounded-xl px-6 py-3.5",
+                  "text-sm font-semibold text-white md:rounded-lg md:py-3 md:text-base",
                   "bg-yac-red shadow-[0_4px_14px_rgba(220,38,38,0.35)]",
                   "transition-all hover:bg-yac-red/90 active:scale-[0.98]",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yac-red focus-visible:ring-offset-2"
@@ -272,33 +285,48 @@ export default function Hero() {
               <a
                 href="#courses"
                 className={cx(
-                  "inline-flex items-center justify-center rounded-lg border-2 border-zinc-900/15",
-                  "bg-white px-6 py-3 text-center text-sm font-semibold text-zinc-900 md:text-base",
-                  "transition-all hover:border-zinc-900/30 hover:bg-zinc-50 active:scale-[0.98]",
+                  "inline-flex items-center justify-center rounded-xl border border-zinc-200",
+                  "bg-zinc-50 px-6 py-3.5 text-sm font-semibold text-zinc-800 md:rounded-lg md:border-2 md:border-zinc-900/15 md:bg-white md:py-3 md:text-base",
+                  "transition-all hover:bg-zinc-100 active:scale-[0.98] md:hover:border-zinc-900/30 md:hover:bg-zinc-50",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2"
                 )}
               >
                 Explore Courses
               </a>
-            </div>
+            </motion.div>
 
-            <ul className="mt-10 grid grid-cols-2 gap-4 border-t border-zinc-200/80 pt-8 sm:grid-cols-4 sm:gap-3">
+            <motion.ul
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: 0.25 }}
+              className="mt-6 grid grid-cols-2 gap-2 min-[375px]:mt-7 min-[375px]:gap-2.5 md:mt-10 md:grid-cols-4 md:gap-3 md:border-t md:border-zinc-200/80 md:pt-8"
+            >
               {stats.map((stat) => (
-                <li key={stat.label}>
-                  <p className="text-xl font-bold text-zinc-900 sm:text-2xl">
-                    {stat.value}
+                <li
+                  key={stat.label}
+                  className={cx(
+                    "min-w-0 rounded-xl border border-zinc-100 bg-white px-2.5 py-2.5",
+                    "shadow-sm min-[375px]:px-3 min-[375px]:py-3",
+                    "md:rounded-none md:border-0 md:bg-transparent md:px-0 md:py-0 md:shadow-none"
+                  )}
+                >
+                  <p className="text-base font-bold text-zinc-900 min-[375px]:text-lg md:text-2xl">
+                    <AnimatedCounter end={stat.end} suffix={stat.suffix} />
                   </p>
-                  <p className="mt-0.5 text-xs font-medium text-zinc-500 sm:text-sm">
+                  <p className="mt-0.5 text-[10px] font-medium leading-tight text-zinc-500 min-[375px]:text-[11px] md:text-sm">
                     {stat.label}
                   </p>
                 </li>
               ))}
-            </ul>
+            </motion.ul>
           </div>
 
-          <div className="order-2 w-full md:order-2">
+          <motion.div
+            {...fadeUp}
+            transition={{ ...fadeUp.transition, delay: 0.3 }}
+            className="order-2 min-w-0 w-full md:order-2"
+          >
             <ShuffleGrid />
-          </div>
+          </motion.div>
         </div>
       </Container>
     </section>
