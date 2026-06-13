@@ -13,7 +13,7 @@ export default function Results() {
             variant="light"
             label="Our Results"
             title="Result-Oriented Success"
-            description="AMU Entrance 2026 selections across B.Com, B.A., B.A. Honours, B.A. FL and BBA — swipe to view our students' results."
+            description="AMU Entrance 2026 commerce and arts selections across B.Com, B.A., B.A. Honours, B.A. FL and BBA — proven results from the best commerce coaching in Aligarh."
           />
         </RevealAnimation>
         <CasesWithInfiniteScroll results={results} />

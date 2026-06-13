@@ -24,7 +24,7 @@ export default function Courses() {
                 label="Our Programs"
                 title="Explore Our Courses"
                 highlight="Courses"
-                description="Regular classes, entrance preparation, and professional programs — scroll to explore each one."
+                description="Accounts, Economics, Business Studies, CUET Commerce, B.Com, AMU Entrance, MBA & GD-PI coaching in Aligarh — scroll to explore each program."
               />
             </RevealAnimation>
 

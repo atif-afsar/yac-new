@@ -1,0 +1,18 @@
+# Yasir Ali Classes (YAC) — Aligarh Commerce Coaching
+User-agent: *
+Allow: /
+
+# AI & search crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+Sitemap: https://new.yasiraliclasses.in/sitemap.xml

@@ -284,8 +284,9 @@ export default function Hero() {
               style={gpuLayerStyle}
               className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-zinc-600 min-[375px]:mt-4 min-[375px]:text-[15px] md:mx-0 md:mt-6 md:max-w-none md:text-lg"
             >
-              Class 11–12, AMU, JMI, CUET, Foundation, Commerce &amp; Humanities
-              — expert guidance, live classes &amp; personal mentorship.
+              Class 11–12 Commerce, Accounts, Economics, Business Studies, CUET,
+              AMU, JMI, MBA Entrance &amp; GD-PI — expert guidance, live classes
+              &amp; personal mentorship at YAC Aligarh.
             </m.p>
 
             <m.div

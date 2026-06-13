@@ -89,7 +89,7 @@ const StickyCard = memo(function StickyCard({ course, index, progress, total }) 
           <div className="order-1 h-36 shrink-0 overflow-hidden rounded-xl sm:h-44 md:order-2 md:h-[280px] md:rounded-2xl lg:h-[360px]">
             <img
               src={course.image}
-              alt={course.title}
+              alt={`${course.title} — Yasir Ali Classes commerce coaching Aligarh`}
               loading="lazy"
               decoding="async"
               className="h-full w-full object-cover"

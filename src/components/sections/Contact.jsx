@@ -178,7 +178,7 @@ export default function Contact() {
             label="Contact Us"
             title="Get in Touch with Yasir Ali Classes"
             highlight="Yasir Ali Classes"
-            description="Have questions about admissions, batches, or courses? Fill out the form and our team will reach out shortly."
+            description="Have questions about commerce coaching, CUET, AMU, or MBA entrance admissions in Aligarh? Fill out the form and our team will reach out shortly."
           />
         </RevealAnimation>
 
@@ -225,8 +225,16 @@ export default function Contact() {
                   >
                     {siteConfig.contact.phones[0].display}
                   </a>{" "}
-                  during office hours or visit our {siteConfig.brand.location}{" "}
-                  campus for a free counselling session.
+                  during office hours or{" "}
+                  <a
+                    href={siteConfig.contact.mapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-yac-red hover:underline"
+                  >
+                    visit our {siteConfig.brand.location} campus
+                  </a>{" "}
+                  for a free counselling session on commerce and entrance coaching.
                 </p>
               </div>
             </div>

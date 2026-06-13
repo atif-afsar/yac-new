@@ -1,15 +1,18 @@
 import { useEffect, useRef } from "react";
 import { useInView } from "framer-motion";
 import { ContainerScroll } from "../animations/ContainerScroll";
+import { founderInfo } from "../../data/seo";
 import admissionsVideo from "../../assets/videos/yac-admissions.mp4";
 
 const cx = (...classes) => classes.filter(Boolean).join(" ");
 
 const highlights = [
-  "Expert faculty for Commerce, Humanities & Management",
-  "Dedicated AMU, JMI & CUET entrance preparation",
-  "Live classes, test series & one-to-one mentorship",
-  "Trusted by thousands of students across Aligarh & beyond",
+  "Expert faculty for Accounts, Economics, Business Studies & Commerce",
+  "CUET Commerce, AMU, JMI & MBA Entrance coaching in Aligarh",
+  "Accounts, Economics & Business Studies coaching for Class 11–12 Commerce",
+  "Live classes, test series, GD-PI guidance & one-to-one mentorship",
+  "Online & offline commerce tuition for students across Uttar Pradesh",
+  "Trusted top coaching institute in Aligarh with proven entrance selections",
 ];
 
 function AboutVideo() {
@@ -130,10 +133,14 @@ export default function About() {
 
             <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-zinc-600 sm:mt-5 sm:max-w-2xl sm:text-base md:text-lg">
               Yasir Ali Classes (YAC) is Aligarh&apos;s trusted coaching institute
-              for Class 11–12, Foundation, Commerce, Humanities & Management — with
-              proven results in AMU, JMI, CUET and board examinations. We combine
-              structured academics, regular assessments, and personal mentorship so
-              every student stays focused, confident, and exam-ready.
+              for Class 11–12 Commerce, Accounts, Economics, Business Studies,
+              CUET Commerce, B.Com, AMU Entrance, MBA Entrance, and GD-PI
+              preparation — with proven board and entrance exam results across
+              Aligarh, Uttar Pradesh, and India.
+            </p>
+
+            <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-zinc-600 sm:max-w-2xl sm:text-base md:text-lg">
+              {founderInfo.description}
             </p>
 
             <ul className="mx-auto mt-5 grid max-w-xl gap-2 text-left sm:mt-6 sm:max-w-2xl sm:grid-cols-2 sm:gap-x-4 md:mt-7">

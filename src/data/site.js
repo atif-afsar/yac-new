@@ -4,12 +4,18 @@ export const siteConfig = {
     shortName: "YAC",
     location: "Aligarh",
     description:
-      "Structured mentoring for Commerce, Science, Entrance, and Regular batches with exam-ready systems online and offline.",
+      "Aligarh's leading commerce coaching institute — Accounts, Economics, Business Studies, CUET, AMU, MBA Entrance & GD-PI preparation with structured mentoring online and offline.",
     tagline: "WE DEBIT EFFORTS, TO CREDIT YOUR SUCCESS",
   },
 
   contact: {
+    /** NAP — keep consistent across site, schema, and Google Business Profile */
+    name: "Yasir Ali Classes",
+    streetAddress: "Yasir Ali Classes, Aligarh",
     address: "Aligarh, Uttar Pradesh, India",
+    postalCode: "202001",
+    mapsUrl:
+      "https://www.google.com/maps/search/?api=1&query=Yasir+Ali+Classes+Aligarh+Uttar+Pradesh+India",
     phones: [
       {
         display: "+91 90454 17079",
@@ -34,15 +40,15 @@ export const siteConfig = {
 
   social: {
     youtube: {
-      label: "YouTube",
+      label: "YouTube — Yasir Ali Classes",
       href: "https://youtube.com/channel/UCUlHYg9DL5LACF_fHQI7I_g",
     },
     instagram: {
-      label: "Instagram",
+      label: "Instagram — Yasir Ali Classes Aligarh",
       href: "https://instagram.com/yasiraliclasses/?hl=en",
     },
     facebook: {
-      label: "Facebook",
+      label: "Facebook — Yasir Ali Classes",
       href: "https://www.facebook.com/yasiraliclasses/",
     },
   },
@@ -57,12 +63,12 @@ export const siteConfig = {
       { label: "Admissions", href: "#cta" },
     ],
     programs: [
-      { label: "Commerce Programs", href: "#courses" },
-      { label: "Science Programs", href: "#courses" },
-      { label: "Entrance Preparation", href: "#courses" },
-      { label: "Regular School Batches", href: "#courses" },
-      { label: "Best Coaching in Aligarh", href: "#about" },
-      { label: "Best Entrance Coaching in Aligarh", href: "#courses" },
+      { label: "Commerce Coaching Aligarh", href: "#courses" },
+      { label: "Class 11 & 12 Commerce", href: "#courses" },
+      { label: "Accounts Coaching Aligarh", href: "#courses" },
+      { label: "CUET Commerce Coaching", href: "#courses" },
+      { label: "AMU Entrance Coaching", href: "#courses" },
+      { label: "MBA Entrance & GD-PI Coaching", href: "#courses" },
     ],
     tagline: "Built for students across India — Online & Offline Learning",
     credits: {
@@ -83,6 +89,7 @@ export function getContactCards() {
       id: "address",
       label: "Visit Us",
       value: contact.address,
+      href: contact.mapsUrl,
     },
     ...contact.phones.map((phone, index) => ({
       id: `phone-${index}`,

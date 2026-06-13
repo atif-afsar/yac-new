@@ -88,7 +88,7 @@ export function CasesWithInfiniteScroll({ results = [], className = "" }) {
                 >
                   <img
                     src={tile.image}
-                    alt={`${tile.category} AMU Entrance result ${tile.year}`}
+                    alt={`${tile.category} AMU Entrance result ${tile.year} — Yasir Ali Classes Aligarh`}
                     loading="lazy"
                     decoding="async"
                     className="h-full w-full object-contain object-center transition-transform duration-500 group-hover:scale-[1.02]"
