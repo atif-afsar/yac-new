@@ -1,18 +1,16 @@
 import { useEffect, useRef } from "react";
 import { useInView } from "framer-motion";
-import { ContainerScroll } from "../animations/ContainerScroll";
-import { founderInfo } from "../../data/seo";
+import Container from "../common/Container";
+import RevealAnimation from "../animations/RevealAnimation";
 import admissionsVideo from "../../assets/videos/yac-admissions.mp4";
 
 const cx = (...classes) => classes.filter(Boolean).join(" ");
 
 const highlights = [
-  "Expert faculty for Accounts, Economics, Business Studies & Commerce",
-  "CUET Commerce, AMU, JMI & MBA Entrance coaching in Aligarh",
-  "Accounts, Economics & Business Studies coaching for Class 11–12 Commerce",
-  "Live classes, test series, GD-PI guidance & one-to-one mentorship",
-  "Online & offline commerce tuition for students across Uttar Pradesh",
-  "Trusted top coaching institute in Aligarh with proven entrance selections",
+  "Expert Commerce faculty",
+  "CUET, AMU & MBA entrance prep",
+  "Live classes & test series",
+  "Personal one-to-one mentorship",
 ];
 
 function AboutVideo() {
@@ -86,7 +84,6 @@ function AboutVideo() {
           YAC · Aligarh
         </span>
       </div>
-
     </div>
   );
 }
@@ -96,9 +93,9 @@ export default function About() {
     <section
       id="about"
       className={cx(
-        "relative overflow-x-hidden",
+        "relative overflow-x-clip",
         "bg-gradient-to-b from-white via-zinc-50/80 to-white",
-        "text-zinc-900"
+        "py-14 text-zinc-900 sm:py-20 md:py-28"
       )}
     >
       <div
@@ -106,62 +103,74 @@ export default function About() {
         aria-hidden="true"
       />
 
-      <ContainerScroll
-        titleComponent={
-          <div className="px-4">
-            <span
-              className={cx(
-                "mb-4 inline-flex items-center gap-2 rounded-full border border-yac-red/20",
-                "bg-yac-red/5 px-3 py-1 text-xs font-semibold text-yac-red md:text-sm"
-              )}
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-yac-red" aria-hidden="true" />
-              About Yasir Ali Classes
-            </span>
-
-            <h2 className="text-2xl font-bold leading-tight tracking-tight text-zinc-900 sm:text-3xl md:text-4xl lg:text-5xl">
-              Where Serious Students
-              <br />
-              <span className="relative inline-block text-yac-red">
-                Get Serious Results
-                <span
-                  className="absolute -bottom-1 left-0 h-1 w-full rounded-full bg-yac-red/30"
-                  aria-hidden="true"
-                />
+      <Container className="relative z-10">
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14 xl:gap-20">
+          {/* Left — text content */}
+          <RevealAnimation>
+            <div className="mx-auto max-w-xl text-center lg:mx-0 lg:max-w-none lg:text-left">
+              <span
+                className={cx(
+                  "mb-4 inline-flex items-center gap-2 rounded-full border border-yac-red/20",
+                  "bg-yac-red/5 px-3 py-1 text-xs font-semibold text-yac-red md:text-sm"
+                )}
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-yac-red" aria-hidden="true" />
+                About Yasir Ali Classes
               </span>
-            </h2>
 
-            <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-zinc-600 sm:mt-5 sm:max-w-2xl sm:text-base md:text-lg">
-              Yasir Ali Classes (YAC) is Aligarh&apos;s trusted coaching institute
-              for Class 11–12 Commerce, Accounts, Economics, Business Studies,
-              CUET Commerce, B.Com, AMU Entrance, MBA Entrance, and GD-PI
-              preparation — with proven board and entrance exam results across
-              Aligarh, Uttar Pradesh, and India.
-            </p>
-
-            <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-zinc-600 sm:max-w-2xl sm:text-base md:text-lg">
-              {founderInfo.description}
-            </p>
-
-            <ul className="mx-auto mt-5 grid max-w-xl gap-2 text-left sm:mt-6 sm:max-w-2xl sm:grid-cols-2 sm:gap-x-4 md:mt-7">
-              {highlights.map((item) => (
-                <li
-                  key={item}
-                  className="flex items-start gap-2 text-xs text-zinc-700 sm:text-sm md:text-base"
-                >
+              <h2 className="text-2xl font-bold leading-tight tracking-tight text-zinc-900 sm:text-3xl md:text-4xl lg:text-5xl">
+                Where Serious Students
+                <br />
+                <span className="relative inline-block text-yac-red">
+                  Get Serious Results
                   <span
-                    className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-yac-red"
+                    className="absolute -bottom-1 left-0 h-1 w-full rounded-full bg-yac-red/30"
                     aria-hidden="true"
                   />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        }
-      >
-        <AboutVideo />
-      </ContainerScroll>
+                </span>
+              </h2>
+
+              <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-zinc-600 sm:mt-5 sm:text-base md:text-lg lg:mx-0 lg:max-w-lg">
+                Aligarh&apos;s trusted coaching institute for Class 11–12 Commerce,
+                CUET, AMU &amp; MBA entrance — with proven board and entrance exam
+                results.
+              </p>
+
+              <ul className="mx-auto mt-6 grid max-w-md gap-2.5 text-left sm:mt-7 sm:grid-cols-2 sm:gap-x-5 lg:mx-0 lg:max-w-lg">
+                {highlights.map((item) => (
+                  <li
+                    key={item}
+                    className="flex items-start gap-2 text-xs text-zinc-700 sm:text-sm md:text-[15px]"
+                  >
+                    <span
+                      className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-yac-red"
+                      aria-hidden="true"
+                    />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </RevealAnimation>
+
+          {/* Right — video */}
+          <RevealAnimation delay={0.1}>
+            <div className="mx-auto w-full max-w-xl lg:mx-0 lg:max-w-none">
+              <div
+                className={cx(
+                  "relative overflow-hidden rounded-2xl border-2 border-zinc-200 bg-white p-2",
+                  "shadow-[0_12px_40px_rgba(24,24,27,0.1)]",
+                  "sm:rounded-3xl sm:p-2.5 md:p-3"
+                )}
+              >
+                <div className="aspect-video w-full overflow-hidden rounded-xl border border-zinc-100 bg-zinc-50 sm:rounded-2xl">
+                  <AboutVideo />
+                </div>
+              </div>
+            </div>
+          </RevealAnimation>
+        </div>
+      </Container>
     </section>
   );
 }

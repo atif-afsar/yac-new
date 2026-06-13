@@ -240,7 +240,7 @@ export default function Hero() {
     <section
       id="hero"
       className={cx(
-        "relative overflow-x-clip pt-16 md:pt-[4.5rem]",
+        "relative overflow-x-clip pt-[4.25rem] md:pt-[4.5rem]",
         "bg-gradient-to-b from-white via-zinc-50/90 to-white",
         "text-zinc-900"
       )}
@@ -250,8 +250,8 @@ export default function Hero() {
         aria-hidden="true"
       />
 
-      <Container className="relative z-10 pb-10 pt-5 md:pb-12 md:pt-6 lg:pb-14 lg:pt-8">
-        <div className="grid grid-cols-1 items-center gap-6 md:grid-cols-2 md:gap-12 lg:gap-16">
+      <Container className="relative z-10 pb-10 pt-0 md:pb-12 md:pt-5 lg:pb-14 lg:pt-6">
+        <div className="grid grid-cols-1 items-center gap-6 max-md:-mt-3 md:grid-cols-2 md:gap-12 md:mt-0 lg:gap-16">
           <div className="order-1 min-w-0 w-full max-w-xl text-center md:text-left">
             <m.span
               {...motionProps}

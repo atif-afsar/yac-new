@@ -157,6 +157,7 @@ function MobileSidebar({ open, onClose }) {
       />
 
       <aside
+        id="mobile-nav-drawer"
         className={cx(
           "fixed right-0 top-0 z-[70] flex h-dvh w-[78vw] max-w-xs flex-col",
           "border-l border-zinc-200 bg-white shadow-2xl md:hidden",
@@ -170,29 +171,42 @@ function MobileSidebar({ open, onClose }) {
         aria-hidden={!open}
         aria-label="Mobile navigation"
       >
-        <div className="flex items-center justify-between border-b border-zinc-200/80 px-4 py-4">
-          <div className="flex items-center gap-2.5">
-            <Logo size="md" />
+        <div className="relative flex items-center justify-between overflow-hidden border-b border-white/15 bg-[#b91c1c] px-4 py-4">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 opacity-100"
+            style={{
+              backgroundImage: `
+                repeating-linear-gradient(0deg, transparent, transparent 10px, rgba(255,255,255,0.06) 10px, rgba(255,255,255,0.06) 11px),
+                repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(255,255,255,0.06) 10px, rgba(255,255,255,0.06) 11px)
+              `,
+            }}
+          />
+          <div className="relative flex items-center gap-2.5">
+            <span className="rounded-lg bg-white p-1">
+              <Logo size="md" />
+            </span>
             <span className="flex min-w-0 flex-col">
-              <span className="text-[10px] font-semibold uppercase tracking-wide text-zinc-500">
+              <span className="text-sm font-bold leading-tight text-white">
                 Yasir Ali Classes
               </span>
-              <span className="text-sm font-bold leading-tight text-zinc-900">
-                Aligarh
+              <span className="text-[9px] font-semibold uppercase tracking-wider text-white/90">
+                Best Commerce Coaching · Aligarh
               </span>
             </span>
           </div>
           <button
             type="button"
             className={cx(
-              "rounded-lg border border-zinc-200 bg-white p-2 text-zinc-600",
-              "transition-colors hover:bg-zinc-100 hover:text-zinc-900",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yac-red"
+              "relative inline-flex size-10 shrink-0 items-center justify-center rounded-xl",
+              "border border-white/25 bg-white/15 text-white backdrop-blur-sm",
+              "transition-colors active:bg-white/25",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
             )}
             aria-label="Close menu"
             onClick={onClose}
           >
-            <X className="h-5 w-5" />
+            <X className="h-5 w-5" aria-hidden />
           </button>
         </div>
 
@@ -248,28 +262,29 @@ export default function Navbar() {
   return (
     <header
       className={cx(
-        "fixed inset-x-0 top-0 z-50 w-full max-w-[100vw]",
-        "border-b border-zinc-200 bg-white",
-        "shadow-sm"
+        "nav-mobile-red relative fixed inset-x-0 top-0 z-50 w-full max-w-[100vw]",
+        "border-b border-white/15 shadow-md"
       )}
     >
-      <Container className="max-w-full">
+      <Container className="relative z-[1] max-w-full">
         <nav
-          className="flex h-16 w-full items-center gap-3 md:gap-5 lg:gap-6"
+          className="flex h-[4.25rem] w-full items-center gap-3 md:h-16 md:gap-5 lg:gap-6"
           aria-label="Main navigation"
         >
           <a
             href="#hero"
-            className="flex min-w-0 flex-1 items-center gap-2 sm:flex-initial sm:gap-2.5"
+            className="flex min-w-0 flex-1 items-center gap-2.5 sm:flex-initial md:gap-2.5 md:pl-16 lg:pl-24 xl:pl-28"
             onClick={() => setMobileOpen(false)}
           >
-            <Logo size="md" />
+            <span className="shrink-0 rounded-lg bg-white p-1">
+              <Logo size="md" />
+            </span>
             <span className="flex min-w-0 flex-col leading-tight">
-              <span className="truncate text-[10px] font-semibold uppercase tracking-wide text-zinc-500">
+              <span className="truncate text-sm font-bold text-white md:text-base">
                 Yasir Ali Classes
               </span>
-              <span className="truncate text-xs font-bold text-zinc-900 sm:text-sm">
-                Aligarh
+              <span className="truncate text-[9px] font-semibold uppercase tracking-[0.12em] text-white/90 min-[375px]:text-[10px] md:text-[11px]">
+                Best Commerce Coaching · Aligarh
               </span>
             </span>
           </a>
@@ -282,12 +297,12 @@ export default function Navbar() {
             <a
               href="#cta"
               className={cx(
-                "inline-flex items-center justify-center rounded-lg border border-yac-red/20",
-                "px-5 py-2.5 text-sm font-semibold text-white bg-yac-red",
-                "shadow-[0_4px_12px_rgba(220,38,38,0.35)]",
-                "ring-2 ring-white ring-offset-0",
-                "transition-all hover:bg-yac-red/90 active:scale-[0.98]",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yac-red focus-visible:ring-offset-2"
+                "inline-flex items-center justify-center rounded-lg",
+                "border border-white/30 bg-white px-5 py-2.5",
+                "text-sm font-semibold text-[#b91c1c]",
+                "shadow-[0_4px_12px_rgba(0,0,0,0.15)]",
+                "transition-all hover:bg-white/90 active:scale-[0.98]",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#b91c1c]"
               )}
             >
               Join Now
@@ -297,16 +312,17 @@ export default function Navbar() {
           <button
             type="button"
             className={cx(
-              "ml-auto inline-flex shrink-0 items-center justify-center rounded-lg md:hidden",
-              "border border-zinc-200 bg-white p-2 text-zinc-700 shadow-sm",
-              "transition-colors hover:bg-zinc-100 hover:text-zinc-900",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yac-red"
+              "relative ml-auto inline-flex size-11 shrink-0 items-center justify-center md:hidden",
+              "rounded-xl border border-white/25 bg-white/15 text-white backdrop-blur-sm",
+              "transition-colors active:bg-white/25",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
             )}
             aria-label="Open menu"
             aria-expanded={mobileOpen}
+            aria-controls="mobile-nav-drawer"
             onClick={() => setMobileOpen(true)}
           >
-            <Menu className="h-6 w-6" />
+            <Menu className="h-6 w-6 shrink-0" strokeWidth={2.25} aria-hidden />
           </button>
         </nav>
       </Container>

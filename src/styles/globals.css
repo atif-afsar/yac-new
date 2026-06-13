@@ -196,3 +196,30 @@
   border-color: hsl(0 85% 55% / 0.35);
   box-shadow: 0 4px 16px rgba(220, 38, 38, 0.08);
 }
+
+/* Navbar — deep red with subtle grid texture (all breakpoints) */
+.nav-mobile-red {
+  background-color: #b91c1c;
+}
+
+.nav-mobile-red::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 10px,
+      rgba(255, 255, 255, 0.06) 10px,
+      rgba(255, 255, 255, 0.06) 11px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 10px,
+      rgba(255, 255, 255, 0.06) 10px,
+      rgba(255, 255, 255, 0.06) 11px
+    );
+}
