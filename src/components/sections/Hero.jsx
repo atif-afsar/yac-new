@@ -1,11 +1,28 @@
 import { memo, useEffect, useRef, useState } from "react";
 import { m, useInView } from "framer-motion";
+import { ArrowRight, Play, Star } from "lucide-react";
 import Container from "../common/Container";
 import Logo from "../common/Logo";
 import { EASE_OUT_EXPO, gpuLayerStyle } from "../../lib/motion";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 
 const cx = (...classes) => classes.filter(Boolean).join(" ");
+
+const mobilePills = [
+  "Commerce",
+  "Science",
+  "Junior (5–10)",
+  "CA Foundation",
+  "CMA",
+  "Class 11–12",
+  "Entrance Exams",
+];
+
+const mobileTrust = [
+  { id: "rating", text: "4.9 Google", icon: true },
+  { id: "years", text: "10+ Years in Aligarh" },
+  { id: "students", text: "1200+ Students" },
+];
 
 const shuffle = (array) => {
   const arr = [...array];
@@ -230,6 +247,133 @@ const fadeUp = {
   transition: { duration: 0.5, ease: EASE_OUT_EXPO },
 };
 
+function MobileHero({ motionProps, prefersReducedMotion }) {
+  const delay = (d) => ({
+    ...fadeUp.transition,
+    delay: prefersReducedMotion ? 0 : d,
+  });
+
+  return (
+    <div className="flex flex-col items-center text-center md:hidden">
+      <m.div
+        {...motionProps}
+        transition={delay(0.05)}
+        style={gpuLayerStyle}
+        className="flex items-center gap-2"
+      >
+        <span className="font-display text-lg italic tracking-wide text-zinc-900">
+          <span className="text-yac-red">Yasir Ali</span> Classes
+        </span>
+        <span className="rounded-md bg-yac-red px-1.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wide text-white">
+          YAC
+        </span>
+      </m.div>
+
+      <m.h1
+        {...motionProps}
+        transition={delay(0.1)}
+        style={gpuLayerStyle}
+        className="mt-4 text-balance text-[2rem] font-bold leading-[1.15] tracking-tight text-zinc-900 min-[375px]:text-[2.15rem]"
+      >
+        Aligarh&apos;s Most Trusted{" "}
+        <span className="font-display font-semibold italic text-yac-red">
+          Coaching
+        </span>{" "}
+        for Commerce, Science &amp; CA
+      </m.h1>
+
+      <m.ul
+        {...motionProps}
+        transition={delay(0.15)}
+        style={gpuLayerStyle}
+        className="mt-5 flex flex-wrap justify-center gap-2"
+      >
+        {mobilePills.map((pill) => (
+          <li
+            key={pill}
+            className={cx(
+              "rounded-full border border-yac-red/30 bg-white px-3 py-1",
+              "text-[11px] font-semibold uppercase tracking-wide text-yac-red"
+            )}
+          >
+            {pill}
+          </li>
+        ))}
+      </m.ul>
+
+      <m.p
+        {...motionProps}
+        transition={delay(0.2)}
+        style={gpuLayerStyle}
+        className="mt-5 font-display text-base italic text-zinc-500"
+      >
+        We Debit Efforts, to Credit Your Success.
+      </m.p>
+
+      <m.div
+        {...motionProps}
+        transition={delay(0.25)}
+        style={gpuLayerStyle}
+        className="mt-6 flex w-full flex-col gap-3"
+      >
+        <a
+          href="#cta"
+          className={cx(
+            "inline-flex items-center justify-center gap-2 rounded-2xl px-6 py-4",
+            "text-base font-semibold text-white",
+            "bg-yac-red shadow-[0_6px_20px_rgba(220,38,38,0.35)]",
+            "transition-all active:scale-[0.98]",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yac-red focus-visible:ring-offset-2"
+          )}
+        >
+          Join YAC Now
+          <ArrowRight className="size-5 shrink-0" aria-hidden="true" />
+        </a>
+        <a
+          href="#courses"
+          className={cx(
+            "inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-zinc-900/15 bg-white px-6 py-4",
+            "text-base font-semibold text-zinc-900",
+            "transition-all active:scale-[0.98]",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2"
+          )}
+        >
+          <Play className="size-4 shrink-0 fill-current" aria-hidden="true" />
+          Explore Courses
+        </a>
+      </m.div>
+
+      <m.div
+        {...motionProps}
+        transition={delay(0.3)}
+        style={gpuLayerStyle}
+        className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-[11px] font-semibold uppercase tracking-wide text-zinc-500"
+      >
+        {mobileTrust.map((item, index) => (
+          <span key={item.id} className="flex items-center gap-3">
+            {index > 0 && <span className="text-zinc-300" aria-hidden="true">|</span>}
+            <span className="flex items-center gap-1.5">
+              {item.icon && (
+                <Star className="size-3.5 shrink-0 fill-yac-gold text-yac-gold" aria-hidden="true" />
+              )}
+              {item.text}
+            </span>
+          </span>
+        ))}
+      </m.div>
+
+      <m.div
+        {...motionProps}
+        transition={delay(0.35)}
+        style={gpuLayerStyle}
+        className="mt-8 w-full"
+      >
+        <ShuffleGrid />
+      </m.div>
+    </div>
+  );
+}
+
 export default function Hero() {
   const prefersReducedMotion = usePrefersReducedMotion();
   const motionProps = prefersReducedMotion
@@ -240,7 +384,7 @@ export default function Hero() {
     <section
       id="hero"
       className={cx(
-        "relative overflow-x-clip pt-[4.25rem] md:pt-[4.5rem]",
+        "relative overflow-x-clip pt-[4.25rem] md:pt-16",
         "bg-gradient-to-b from-white via-zinc-50/90 to-white",
         "text-zinc-900"
       )}
@@ -250,8 +394,10 @@ export default function Hero() {
         aria-hidden="true"
       />
 
-      <Container className="relative z-10 pb-10 pt-0 md:pb-12 md:pt-5 lg:pb-14 lg:pt-6">
-        <div className="grid grid-cols-1 items-center gap-6 max-md:-mt-3 md:grid-cols-2 md:gap-12 md:mt-0 lg:gap-16">
+      <Container className="relative z-10 pb-12 pt-0 md:pb-12 md:pt-1 lg:pb-14 lg:pt-2">
+        <MobileHero motionProps={motionProps} prefersReducedMotion={prefersReducedMotion} />
+
+        <div className="hidden items-center md:grid md:grid-cols-2 md:gap-12 lg:gap-16">
           <div className="order-1 min-w-0 w-full max-w-xl text-center md:text-left">
             <m.span
               {...motionProps}
