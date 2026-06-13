@@ -1,38 +1,48 @@
+import { lazy, Suspense } from "react";
 import { ReactLenis } from "lenis/react";
 import "lenis/dist/lenis.css";
+import MotionProvider from "./components/motion/MotionProvider";
 import Navbar from "./components/common/Navbar";
 import ParticleBackground from "./components/animations/ParticleBackground";
 import Hero from "./components/sections/Hero";
-import About from "./components/sections/About";
-import Courses from "./components/sections/Courses";
-import Results from "./components/sections/Results";
-import WhyChooseUs from "./components/sections/WhyChooseUs";
-import Testimonials from "./components/sections/Testimonials";
-import CTA from "./components/sections/CTA";
-import Contact from "./components/sections/Contact";
-import Footer from "./components/sections/Footer";
 
-function App() {  return (
-    <ReactLenis root options={{ lerp: 0.08, smoothWheel: true, anchors: true }}>
-      <Navbar />
-      <div className="relative min-h-screen w-full overflow-x-clip">
-        <ParticleBackground />
+const About = lazy(() => import("./components/sections/About"));
+const Courses = lazy(() => import("./components/sections/Courses"));
+const Results = lazy(() => import("./components/sections/Results"));
+const WhyChooseUs = lazy(() => import("./components/sections/WhyChooseUs"));
+const Testimonials = lazy(() => import("./components/sections/Testimonials"));
+const CTA = lazy(() => import("./components/sections/CTA"));
+const Contact = lazy(() => import("./components/sections/Contact"));
+const Footer = lazy(() => import("./components/sections/Footer"));
 
-        <div className="relative z-10 w-full overflow-x-clip">
-          <main className="w-full overflow-x-clip">
-            <Hero />
-            <About />
-            <Courses />
-            <Results />
-            <WhyChooseUs />
-            <Testimonials />
-            <CTA />
-            <Contact />
-          </main>
-          <Footer />
+function App() {
+  return (
+    <MotionProvider>
+      <ReactLenis root options={{ lerp: 0.08, smoothWheel: true, anchors: true }}>
+        <Navbar />
+        <div className="relative min-h-screen w-full overflow-x-clip">
+          <ParticleBackground />
+
+          <div className="relative z-10 w-full overflow-x-clip">
+            <main className="w-full overflow-x-clip">
+              <Hero />
+              <Suspense fallback={null}>
+                <About />
+                <Courses />
+                <Results />
+                <WhyChooseUs />
+                <Testimonials />
+                <CTA />
+                <Contact />
+              </Suspense>
+            </main>
+            <Suspense fallback={null}>
+              <Footer />
+            </Suspense>
+          </div>
         </div>
-      </div>
-    </ReactLenis>
+      </ReactLenis>
+    </MotionProvider>
   );
 }
 

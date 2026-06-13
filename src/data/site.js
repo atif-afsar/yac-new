@@ -35,15 +35,15 @@ export const siteConfig = {
   social: {
     youtube: {
       label: "YouTube",
-      href: "https://www.youtube.com",
+      href: "https://youtube.com/channel/UCUlHYg9DL5LACF_fHQI7I_g",
     },
     instagram: {
       label: "Instagram",
-      href: "https://www.instagram.com",
+      href: "https://instagram.com/yasiraliclasses/?hl=en",
     },
     facebook: {
       label: "Facebook",
-      href: "https://www.facebook.com",
+      href: "https://www.facebook.com/yasiraliclasses/",
     },
   },
 

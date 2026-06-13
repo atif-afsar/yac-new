@@ -44,7 +44,7 @@ function AboutVideo() {
         muted
         loop
         playsInline
-        preload="auto"
+        preload="metadata"
         controls
         poster="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1200&q=80"
         aria-label="Yasir Ali Classes admissions — where serious students get serious results"

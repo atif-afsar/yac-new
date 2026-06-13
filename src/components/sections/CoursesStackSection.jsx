@@ -1,9 +1,10 @@
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { memo, useRef } from "react";
+import { m, useScroll, useTransform } from "framer-motion";
 import { courses } from "../../data/courses";
 import { cn } from "../../lib/utils";
+import { gpuLayerStyle } from "../../lib/motion";
 
-function StickyCard({ course, index, progress, total }) {
+const StickyCard = memo(function StickyCard({ course, index, progress, total }) {
   const start = index / total;
   const end = (index + 1) / total;
 
@@ -14,18 +15,19 @@ function StickyCard({ course, index, progress, total }) {
 
   return (
     <div className="sticky top-0 flex h-screen items-center justify-center px-3 py-4 sm:px-4 sm:py-6">
-      <motion.div
+      <m.div
         style={{
           scale,
           y,
           backgroundColor: course.bg,
           zIndex: index + 1,
-          willChange: "transform",
+          ...gpuLayerStyle,
         }}
         className={cn(
           "relative flex w-full max-w-6xl flex-col overflow-hidden rounded-2xl border border-black/10 shadow-2xl sm:rounded-3xl",
           "max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-3rem)]",
           "p-4 sm:p-6 md:p-8 lg:p-12",
+          "transform-gpu",
           course.lightText ? "text-white" : "text-black"
         )}
       >
@@ -94,10 +96,10 @@ function StickyCard({ course, index, progress, total }) {
             />
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </div>
   );
-}
+});
 
 const stackCourses = courses.map((course) => ({
   id: course.id,
@@ -116,12 +118,13 @@ export default function CoursesStackSection() {
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
+    layoutEffect: false,
   });
 
   return (
     <section
       ref={containerRef}
-      className="relative w-full overflow-x-clip bg-white"
+      className="section-scroll-driven relative w-full overflow-x-clip bg-white"
       style={{ height: `${total * 100}vh` }}
     >
       {stackCourses.map((course, index) => (

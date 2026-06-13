@@ -1,4 +1,6 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
+import { EASE_OUT_EXPO, gpuLayerStyle } from "../../lib/motion";
+import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 import { GraduationCap, Phone, Sparkles } from "lucide-react";
 import Container from "../common/Container";
 import { InteractiveRobotSpline } from "../ui/interactive-3d-robot";
@@ -15,6 +17,8 @@ const highlights = [
 ];
 
 export default function CTA() {
+  const prefersReducedMotion = usePrefersReducedMotion();
+
   return (
     <section
       id="cta"
@@ -32,11 +36,12 @@ export default function CTA() {
       <Container className="relative z-10">
         <div className="overflow-hidden rounded-3xl border border-neutral-200/80 bg-white">
           <div className="grid md:min-h-[620px] md:grid-cols-2">
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            <m.div
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 24 }}
+              whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
               viewport={{ once: true }}
+              style={gpuLayerStyle}
               className="flex items-center px-5 py-10 sm:px-8 md:px-10 md:py-14"
             >
               <div className="w-full max-w-lg">
@@ -95,7 +100,7 @@ export default function CTA() {
                   </a>
                 </div>
               </div>
-            </motion.div>
+            </m.div>
 
             <div className="relative h-[280px] overflow-hidden sm:h-[340px] md:h-auto md:min-h-full">
               <div className="absolute inset-0 flex items-end justify-center md:items-center">

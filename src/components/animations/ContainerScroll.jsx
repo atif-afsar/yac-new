@@ -1,5 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { memo, useRef } from "react";
+import { m, useScroll, useTransform } from "framer-motion";
+import { useMediaQuery } from "../../hooks/useMediaQuery";
+import { gpuLayerStyle } from "../../lib/motion";
 
 const cx = (...classes) => classes.filter(Boolean).join(" ");
 
@@ -8,15 +10,9 @@ export function ContainerScroll({ titleComponent, children }) {
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
+    layoutEffect: false,
   });
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const scaleRange = isMobile ? [0.9, 1] : [1.05, 1];
   const rotate = useTransform(scrollYProgress, [0, 1], [20, 0]);
@@ -28,7 +24,8 @@ export function ContainerScroll({ titleComponent, children }) {
       ref={containerRef}
       className={cx(
         "relative flex items-center justify-center overflow-x-clip px-3 sm:px-4 md:px-6",
-        "h-[46rem] sm:h-[54rem] md:h-[68rem] lg:h-[74rem]"
+        "h-[46rem] sm:h-[54rem] md:h-[68rem] lg:h-[74rem]",
+        "section-scroll-driven"
       )}
     >
       <div
@@ -47,25 +44,26 @@ export function ContainerScroll({ titleComponent, children }) {
   );
 }
 
-function ScrollHeader({ translate, titleComponent }) {
+const ScrollHeader = memo(function ScrollHeader({ translate, titleComponent }) {
   return (
-    <motion.div
-      style={{ y: translate }}
-      className="mx-auto max-w-3xl text-center sm:max-w-4xl"
+    <m.div
+      style={{ y: translate, ...gpuLayerStyle }}
+      className="mx-auto max-w-3xl text-center sm:max-w-4xl transform-gpu"
     >
       {titleComponent}
-    </motion.div>
+    </m.div>
   );
-}
+});
 
-function ScrollCard({ rotate, scale, children }) {
+const ScrollCard = memo(function ScrollCard({ rotate, scale, children }) {
   return (
-    <motion.div
+    <m.div
       style={{
         rotateX: rotate,
         scale,
         transformOrigin: "top center",
         transformPerspective: 1200,
+        ...gpuLayerStyle,
       }}
       className={cx(
         "mx-auto -mt-6 w-full rounded-2xl border-2 border-zinc-200 bg-white p-2",
@@ -73,12 +71,13 @@ function ScrollCard({ rotate, scale, children }) {
         "max-w-[min(100%,21rem)] sm:max-w-sm sm:-mt-8 sm:rounded-3xl sm:p-2.5",
         "md:max-w-xl md:-mt-10 md:p-3",
         "lg:max-w-3xl lg:p-4",
-        "xl:max-w-4xl"
+        "xl:max-w-4xl",
+        "transform-gpu"
       )}
     >
       <div className="aspect-video w-full overflow-hidden rounded-xl border border-zinc-100 bg-zinc-50 sm:rounded-2xl">
         {children}
       </div>
-    </motion.div>
+    </m.div>
   );
-}
+});

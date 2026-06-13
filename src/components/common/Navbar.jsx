@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { memo, useEffect, useRef, useState } from "react";
+import { m } from "framer-motion";
 import { useLenis } from "lenis/react";
 import { Menu, X, ChevronRight } from "lucide-react";
 import Container from "./Container";
@@ -100,23 +100,24 @@ function NavTab({
   );
 }
 
-function NavCursor({ position }) {
+const NavCursor = memo(function NavCursor({ position }) {
   return (
-    <motion.li
+    <m.li
       animate={{
-        left: position.left,
+        x: position.left,
         width: position.width,
         opacity: position.opacity,
       }}
       transition={{ type: "spring", bounce: 0.12, duration: 0.45 }}
+      style={{ left: 0, willChange: "transform, opacity" }}
       className={cx(
         "pointer-events-none absolute top-1 z-0 h-7 rounded-full bg-zinc-900",
-        "md:top-1.5 md:h-9"
+        "transform-gpu md:top-1.5 md:h-9"
       )}
       aria-hidden="true"
     />
   );
-}
+});
 
 function MobileSidebar({ open, onClose }) {
   const lenis = useLenis();

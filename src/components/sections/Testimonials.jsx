@@ -1,13 +1,20 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Container from "../common/Container";
 import { TestimonialsColumn } from "../ui/testimonials-columns-1";
 import { testimonials } from "../../data/testimonials";
+import { EASE_OUT_EXPO, gpuLayerStyle } from "../../lib/motion";
+import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
+import { useInViewport } from "../../hooks/useInViewport";
 
 const firstColumn = testimonials.slice(0, 3);
 const secondColumn = testimonials.slice(3, 6);
 const thirdColumn = testimonials.slice(6, 9);
 
 export default function Testimonials() {
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const [columnsRef, columnsInView] = useInViewport({ rootMargin: "120px" });
+  const scrollPaused = !columnsInView;
+
   return (
     <section
       id="testimonials"
@@ -23,11 +30,12 @@ export default function Testimonials() {
       />
 
       <Container className="relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+        <m.div
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+          whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.1, ease: EASE_OUT_EXPO }}
           viewport={{ once: true }}
+          style={gpuLayerStyle}
           className="mx-auto flex max-w-[540px] flex-col items-center justify-center"
         >
           <div className="flex justify-center">
@@ -43,23 +51,30 @@ export default function Testimonials() {
             Real stories from learners and families who trust Yasir Ali Classes
             for boards, university, and entrance exam coaching in Aligarh.
           </p>
-        </motion.div>
+        </m.div>
 
-        <div className="mx-auto mt-10 flex max-h-[min(68vh,580px)] justify-center gap-3 overflow-hidden md:max-h-[740px] md:gap-6 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)]">
+        <div
+          ref={columnsRef}
+          className="mx-auto mt-10 flex max-h-[min(68vh,580px)] justify-center gap-3 overflow-hidden md:max-h-[740px] md:gap-6 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)]"
+          data-scroll-paused={scrollPaused ? "true" : undefined}
+        >
           <TestimonialsColumn
             testimonials={firstColumn}
             className="min-w-0 flex-1 md:flex-none"
             duration={15}
+            paused={scrollPaused}
           />
           <TestimonialsColumn
             testimonials={secondColumn}
             className="min-w-0 flex-1 md:flex-none"
             duration={19}
+            paused={scrollPaused}
           />
           <TestimonialsColumn
             testimonials={thirdColumn}
             className="hidden lg:block"
             duration={17}
+            paused={scrollPaused}
           />
         </div>
       </Container>

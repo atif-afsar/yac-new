@@ -1,15 +1,19 @@
-import React from "react";
+import React, { memo } from "react";
 import { cn } from "../../lib/utils";
 
-export function TestimonialsColumn({
+export const TestimonialsColumn = memo(function TestimonialsColumn({
   className,
   testimonials,
   duration = 10,
+  paused = false,
 }) {
   return (
     <div className={className}>
       <div
-        className="animate-testimonial-scroll flex flex-col gap-4 pb-4 md:gap-6 md:pb-6"
+        className={cn(
+          "animate-testimonial-scroll flex flex-col gap-4 pb-4 md:gap-6 md:pb-6",
+          paused && "animation-paused"
+        )}
         style={{ "--testimonial-duration": `${duration}s` }}
       >
         {[...new Array(2).fill(0)].map((_, index) => (
@@ -51,4 +55,4 @@ export function TestimonialsColumn({
       </div>
     </div>
   );
-}
+});

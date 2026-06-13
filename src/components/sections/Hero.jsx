@@ -1,7 +1,9 @@
-import { motion, useInView } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
+import { m, useInView } from "framer-motion";
 import Container from "../common/Container";
 import Logo from "../common/Logo";
+import { EASE_OUT_EXPO, gpuLayerStyle } from "../../lib/motion";
+import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 
 const cx = (...classes) => classes.filter(Boolean).join(" ");
 
@@ -45,21 +47,24 @@ const stats = [
   { end: 1200, suffix: "+", label: "Students Enrolled" },
 ];
 
+const layoutSpring = { duration: 1.5, type: "spring" };
+
 function AnimatedCounter({ end, suffix, duration = 1.8 }) {
   const ref = useRef(null);
+  const valueRef = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-40px" });
-  const [count, setCount] = useState(0);
 
   useEffect(() => {
-    if (!isInView) return;
+    if (!isInView || !valueRef.current) return;
 
     let frameId;
     const startTime = performance.now();
+    const node = valueRef.current;
 
     const tick = (now) => {
       const progress = Math.min((now - startTime) / (duration * 1000), 1);
       const eased = 1 - (1 - progress) ** 3;
-      setCount(Math.round(eased * end));
+      node.textContent = String(Math.round(eased * end));
       if (progress < 1) frameId = requestAnimationFrame(tick);
     };
 
@@ -69,36 +74,40 @@ function AnimatedCounter({ end, suffix, duration = 1.8 }) {
 
   return (
     <span ref={ref}>
-      {count}
+      <span ref={valueRef}>0</span>
       {suffix}
     </span>
   );
 }
 
+const GridSquare = memo(function GridSquare({ sq }) {
+  return (
+    <m.div
+      layout="position"
+      transition={{ layout: layoutSpring }}
+      style={gpuLayerStyle}
+      className="relative h-full w-full transform-gpu overflow-hidden rounded-lg border border-zinc-900/10 md:rounded-md md:shadow-[3px_3px_0_0_rgba(24,24,27,0.25)]"
+    >
+      <img
+        src={sq.src}
+        alt={sq.alt}
+        loading="lazy"
+        decoding="async"
+        className="absolute inset-0 h-full w-full object-cover object-center"
+      />
+      <div className="absolute inset-0 bg-yac-red/15 mix-blend-multiply" aria-hidden="true" />
+      <div
+        className="absolute inset-0 bg-gradient-to-t from-zinc-900/25 to-transparent"
+        aria-hidden="true"
+      />
+    </m.div>
+  );
+});
+
 function generateSquares(count = 16) {
   return shuffle(squareData)
     .slice(0, count)
-    .map((sq) => (
-      <motion.div
-        key={sq.id}
-        layout
-        transition={{ duration: 1.5, type: "spring" }}
-        className="relative h-full w-full overflow-hidden rounded-lg border border-zinc-900/10 md:rounded-md md:shadow-[3px_3px_0_0_rgba(24,24,27,0.25)]"
-      >
-        <img
-          src={sq.src}
-          alt={sq.alt}
-          loading="lazy"
-          decoding="async"
-          className="absolute inset-0 h-full w-full object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-yac-red/15 mix-blend-multiply" aria-hidden="true" />
-        <div
-          className="absolute inset-0 bg-gradient-to-t from-zinc-900/25 to-transparent"
-          aria-hidden="true"
-        />
-      </motion.div>
-    ));
+    .map((sq) => <GridSquare key={sq.id} sq={sq} />);
 }
 
 function useGridSize() {
@@ -119,6 +128,7 @@ function ShuffleGrid() {
   const timeoutRef = useRef(null);
   const gridRef = useRef(null);
   const gridSize = useGridSize();
+  const prefersReducedMotion = usePrefersReducedMotion();
   const [squares, setSquares] = useState(() => generateSquares(9));
 
   useEffect(() => {
@@ -126,6 +136,8 @@ function ShuffleGrid() {
   }, [gridSize]);
 
   useEffect(() => {
+    if (prefersReducedMotion) return;
+
     const element = gridRef.current;
     if (!element) return;
 
@@ -149,11 +161,14 @@ function ShuffleGrid() {
       }
     };
 
-    const observer = new IntersectionObserver(([entry]) => {
-      isVisible = entry.isIntersecting;
-      if (isVisible) start();
-      else stop();
-    });
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible) start();
+        else stop();
+      },
+      { rootMargin: "100px" }
+    );
     observer.observe(element);
 
     const onVisibilityChange = () => {
@@ -167,7 +182,7 @@ function ShuffleGrid() {
       observer.disconnect();
       document.removeEventListener("visibilitychange", onVisibilityChange);
     };
-  }, [gridSize]);
+  }, [gridSize, prefersReducedMotion]);
 
   return (
     <div className="relative w-full" ref={gridRef}>
@@ -185,7 +200,7 @@ function ShuffleGrid() {
           )}
           aria-hidden="true"
         >
-          {squares.map((sq) => sq)}
+          {squares}
         </div>
       </div>
 
@@ -212,10 +227,15 @@ function ShuffleGrid() {
 const fadeUp = {
   initial: { opacity: 0, y: 16 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+  transition: { duration: 0.5, ease: EASE_OUT_EXPO },
 };
 
 export default function Hero() {
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const motionProps = prefersReducedMotion
+    ? { initial: false, animate: { opacity: 1, y: 0 } }
+    : fadeUp;
+
   return (
     <section
       id="hero"
@@ -233,9 +253,10 @@ export default function Hero() {
       <Container className="relative z-10 pb-10 pt-5 md:pb-12 md:pt-6 lg:pb-14 lg:pt-8">
         <div className="grid grid-cols-1 items-center gap-6 md:grid-cols-2 md:gap-12 lg:gap-16">
           <div className="order-1 min-w-0 w-full max-w-xl text-center md:text-left">
-            <motion.span
-              {...fadeUp}
-              transition={{ ...fadeUp.transition, delay: 0.05 }}
+            <m.span
+              {...motionProps}
+              transition={{ ...fadeUp.transition, delay: prefersReducedMotion ? 0 : 0.05 }}
+              style={gpuLayerStyle}
               className={cx(
                 "mb-3 inline-flex items-center gap-2 rounded-full md:mb-4",
                 "border border-yac-red/20 bg-yac-red/5 px-3 py-1",
@@ -245,29 +266,32 @@ export default function Hero() {
               <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-yac-red" aria-hidden="true" />
               <span className="md:hidden">Trusted Coaching in Aligarh</span>
               <span className="hidden md:inline">Yasir Ali Classes — A Trusted Name</span>
-            </motion.span>
+            </m.span>
 
-            <motion.h1
-              {...fadeUp}
-              transition={{ ...fadeUp.transition, delay: 0.1 }}
+            <m.h1
+              {...motionProps}
+              transition={{ ...fadeUp.transition, delay: prefersReducedMotion ? 0 : 0.1 }}
+              style={gpuLayerStyle}
               className="text-balance text-[1.65rem] font-bold leading-[1.2] tracking-tight text-zinc-900 min-[375px]:text-3xl sm:text-4xl lg:text-5xl xl:text-[3.25rem]"
             >
               Best Commerce &amp; Entrance Coaching in{" "}
               <span className="text-yac-red">Aligarh</span>
-            </motion.h1>
+            </m.h1>
 
-            <motion.p
-              {...fadeUp}
-              transition={{ ...fadeUp.transition, delay: 0.15 }}
+            <m.p
+              {...motionProps}
+              transition={{ ...fadeUp.transition, delay: prefersReducedMotion ? 0 : 0.15 }}
+              style={gpuLayerStyle}
               className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-zinc-600 min-[375px]:mt-4 min-[375px]:text-[15px] md:mx-0 md:mt-6 md:max-w-none md:text-lg"
             >
               Class 11–12, AMU, JMI, CUET, Foundation, Commerce &amp; Humanities
               — expert guidance, live classes &amp; personal mentorship.
-            </motion.p>
+            </m.p>
 
-            <motion.div
-              {...fadeUp}
-              transition={{ ...fadeUp.transition, delay: 0.2 }}
+            <m.div
+              {...motionProps}
+              transition={{ ...fadeUp.transition, delay: prefersReducedMotion ? 0 : 0.2 }}
+              style={gpuLayerStyle}
               className="mt-5 flex flex-col gap-2.5 min-[375px]:mt-6 md:mt-8 md:flex-row md:items-center md:gap-3"
             >
               <a
@@ -293,11 +317,12 @@ export default function Hero() {
               >
                 Explore Courses
               </a>
-            </motion.div>
+            </m.div>
 
-            <motion.ul
-              {...fadeUp}
-              transition={{ ...fadeUp.transition, delay: 0.25 }}
+            <m.ul
+              {...motionProps}
+              transition={{ ...fadeUp.transition, delay: prefersReducedMotion ? 0 : 0.25 }}
+              style={gpuLayerStyle}
               className="mt-6 grid grid-cols-2 gap-2 min-[375px]:mt-7 min-[375px]:gap-2.5 md:mt-10 md:grid-cols-4 md:gap-3 md:border-t md:border-zinc-200/80 md:pt-8"
             >
               {stats.map((stat) => (
@@ -317,16 +342,17 @@ export default function Hero() {
                   </p>
                 </li>
               ))}
-            </motion.ul>
+            </m.ul>
           </div>
 
-          <motion.div
-            {...fadeUp}
-            transition={{ ...fadeUp.transition, delay: 0.3 }}
+          <m.div
+            {...motionProps}
+            transition={{ ...fadeUp.transition, delay: prefersReducedMotion ? 0 : 0.3 }}
+            style={gpuLayerStyle}
             className="order-2 min-w-0 w-full md:order-2"
           >
             <ShuffleGrid />
-          </motion.div>
+          </m.div>
         </div>
       </Container>
     </section>

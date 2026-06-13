@@ -65,6 +65,18 @@
   .animate-testimonial-scroll {
     animation: testimonial-scroll-up var(--testimonial-duration, 15s) linear infinite;
     will-change: transform;
+    backface-visibility: hidden;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .animation-paused {
+    animation-play-state: paused;
+  }
+
+  /* Skip paint/layout for off-screen sections until needed */
+  .section-scroll-driven {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 100vh;
   }
 }
 
