@@ -47,19 +47,19 @@ export default function WhyChooseUs() {
           />
         </RevealAnimation>
 
-        <ul className="mt-8 grid min-w-0 gap-4 sm:mt-12 sm:grid-cols-2 sm:gap-5 lg:mt-16 lg:grid-cols-3 lg:gap-6">
-          {whyChooseUsCards.map((card, index) => {
-            const Icon = iconMap[card.icon] ?? GraduationCap;
-            const glowColor = index % 3 === 1 ? "orange" : "red";
+        <RevealAnimation delay={0.08}>
+          <ul className="mt-8 grid min-w-0 gap-4 sm:mt-12 sm:grid-cols-2 sm:gap-5 lg:mt-16 lg:grid-cols-3 lg:gap-6">
+            {whyChooseUsCards.map((card, index) => {
+              const Icon = iconMap[card.icon] ?? GraduationCap;
+              const glowColor = index % 3 === 1 ? "orange" : "red";
 
-            return (
-              <RevealAnimation key={card.id} delay={0.05 * index}>
-                <li className="h-full">
+              return (
+                <li key={card.id} className="h-full">
                   <GlowCard
                     customSize
                     variant="light"
                     glowColor={glowColor}
-                    className="group shadow-sm transition-shadow duration-300 hover:shadow-md"
+                    className="group transition-shadow duration-200 hover:shadow-md"
                   >
                     <div className="relative z-[1] flex h-full flex-col">
                       <div className="mb-4 inline-flex w-fit rounded-xl bg-yac-red/10 p-3 text-yac-red transition-colors group-hover:bg-yac-red group-hover:text-white">
@@ -74,10 +74,10 @@ export default function WhyChooseUs() {
                     </div>
                   </GlowCard>
                 </li>
-              </RevealAnimation>
-            );
-          })}
-        </ul>
+              );
+            })}
+          </ul>
+        </RevealAnimation>
       </Container>
     </section>
   );

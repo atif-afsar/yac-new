@@ -1,270 +1,201 @@
-import { ArrowUpRight, Clock, Mail, MapPin, Phone } from "lucide-react";
-import { FaFacebook, FaInstagram, FaWhatsapp, FaYoutube } from "react-icons/fa";
+import { Phone } from "lucide-react";
+import { FaFacebook, FaInstagram, FaYoutube } from "react-icons/fa";
 import Container from "../common/Container";
 import Logo from "../common/Logo";
+import { siteConfig } from "../../data/site";
 import { cn } from "../../lib/utils";
 
-const quickLinks = [
-  { label: "Home", href: "#hero" },
-  { label: "About", href: "#about" },
-  { label: "Courses", href: "#courses" },
-  { label: "Results", href: "#results" },
-  { label: "Why Us", href: "#why-choose-us" },
-  { label: "Testimonials", href: "#testimonials" },
-  { label: "Contact", href: "#contact" },
-];
+const socialIcons = {
+  youtube: FaYoutube,
+  instagram: FaInstagram,
+  facebook: FaFacebook,
+};
 
-const courseLinks = [
-  { label: "Classes 5–10", href: "#courses" },
-  { label: "Class 11 & 12 Commerce", href: "#courses" },
-  { label: "Class 11 & 12 Humanities", href: "#courses" },
-  { label: "B.Com Programs", href: "#courses" },
-  { label: "Entrance Preparation", href: "#courses" },
-  { label: "Professional Courses", href: "#courses" },
-];
-
-const socialLinks = [
-  {
-    label: "Facebook",
-    href: "#",
-    icon: FaFacebook,
-    hover: "hover:bg-[#1877F2] hover:text-white hover:border-[#1877F2]",
-  },
-  {
-    label: "Instagram",
-    href: "#",
-    icon: FaInstagram,
-    hover: "hover:bg-gradient-to-br hover:from-[#f58529] hover:via-[#dd2a7b] hover:to-[#8134af] hover:text-white hover:border-transparent",
-  },
-  {
-    label: "YouTube",
-    href: "#",
-    icon: FaYoutube,
-    hover: "hover:bg-[#FF0000] hover:text-white hover:border-[#FF0000]",
-  },
-  {
-    label: "WhatsApp",
-    href: "#",
-    icon: FaWhatsapp,
-    hover: "hover:bg-[#25D366] hover:text-white hover:border-[#25D366]",
-  },
-];
-
-function FooterLink({ href, children }) {
+function FooterLink({ href, children, external = false }) {
   return (
     <a
       href={href}
-      className="group inline-flex items-center gap-1 text-sm text-neutral-600 transition-colors hover:text-yac-red"
+      {...(external
+        ? { target: "_blank", rel: "noopener noreferrer" }
+        : {})}
+      className="text-sm text-neutral-500 transition-colors hover:text-white"
     >
       {children}
-      <ArrowUpRight
-        className="size-3 opacity-0 transition-all group-hover:opacity-100"
+    </a>
+  );
+}
+
+function FooterColumn({ title, children }) {
+  return (
+    <div>
+      <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-white">
+        {title}
+      </h3>
+      {children}
+    </div>
+  );
+}
+
+function FloatingCallButton() {
+  return (
+    <a
+      href={siteConfig.contact.primaryPhone}
+      aria-label="Call Yasir Ali Classes"
+      className={cn(
+        "fixed bottom-5 left-5 z-50 flex size-14 items-center justify-center rounded-full",
+        "bg-yac-red text-white shadow-[0_0_0_4px_rgba(255,255,255,0.15),0_0_0_8px_rgba(220,38,38,0.25)]",
+        "transition-transform hover:scale-105 active:scale-95",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yac-red focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+      )}
+    >
+      <Phone className="size-6" aria-hidden />
+    </a>
+  );
+}
+
+function FooterYacMark() {
+  return (
+    <a
+      href="#hero"
+      className="footer-yac-mark group block w-full overflow-hidden py-6 sm:py-8 md:py-10"
+      aria-label={`${siteConfig.brand.name} home`}
+    >
+      <span
         aria-hidden
-      />
+        className={cn(
+          "footer-yac-text block text-center font-black uppercase leading-[0.82]",
+          "tracking-[-0.04em]",
+          "text-[clamp(5.5rem,24vw,16rem)]"
+        )}
+      >
+        {siteConfig.brand.shortName}
+      </span>
     </a>
   );
 }
 
 export default function Footer() {
+  const { brand, contact, social, footer } = siteConfig;
+  const year = new Date().getFullYear();
+
   return (
-    <footer className="relative overflow-hidden border-t border-zinc-200 bg-white text-neutral-700">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-32 top-0 h-64 w-64 rounded-full bg-yac-red/5 blur-3xl"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-32 bottom-0 h-64 w-64 rounded-full bg-yac-purple/5 blur-3xl"
-      />
+    <footer className="relative overflow-hidden bg-black text-neutral-400">
+      <Container>
+        <FooterYacMark />
 
-      <Container className="relative z-10">
-        {/* Top CTA strip */}
-        <div className="border-b border-zinc-200 py-10 md:py-12">
-          <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-yac-red">
-                Admissions Open
-              </p>
-              <h2 className="mt-2 text-2xl font-bold text-neutral-900 sm:text-3xl">
-                Ready to start your journey with{" "}
-                <span className="text-yac-red">YAC</span>?
-              </h2>
-              <p className="mt-2 max-w-lg text-sm text-neutral-600">
-                Join thousands of students and parents who trust Yasir Ali
-                Classes for result-oriented coaching in Aligarh.
-              </p>
+        <div className="border-t border-white/10 pb-10 pt-10 md:pb-12 md:pt-12">
+          <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between lg:gap-16">
+            {/* Logo + socials */}
+            <div className="shrink-0">
+              <a
+                href="#hero"
+                className="inline-flex rounded-2xl bg-white p-2.5 shadow-sm"
+              >
+                <Logo size="lg" />
+              </a>
+              <div className="mt-6 flex items-center gap-5">
+                {Object.entries(social).map(([key, { label, href }]) => {
+                  const Icon = socialIcons[key];
+                  return (
+                    <a
+                      key={key}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={label}
+                      className="text-neutral-400 transition-colors hover:text-white"
+                    >
+                      <Icon className="size-5" />
+                    </a>
+                  );
+                })}
+              </div>
             </div>
-            <a
-              href="#contact"
-              className={cn(
-                "inline-flex shrink-0 items-center justify-center rounded-xl px-6 py-3",
-                "text-sm font-semibold text-white",
-                "bg-yac-red shadow-[0_4px_14px_rgba(220,38,38,0.35)]",
-                "transition-all hover:bg-yac-red/90 hover:shadow-[0_4px_20px_rgba(220,38,38,0.45)]",
-                "active:scale-[0.98]",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yac-red focus-visible:ring-offset-2"
-              )}
-            >
-              Enquire Now
-            </a>
+
+            {/* Link columns */}
+            <div className="grid flex-1 grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-8">
+              <FooterColumn title="About">
+                <ul className="mt-4 flex flex-col gap-2.5">
+                  {footer.about.map((link) => (
+                    <li key={link.label}>
+                      <FooterLink href={link.href}>{link.label}</FooterLink>
+                    </li>
+                  ))}
+                </ul>
+              </FooterColumn>
+
+              <FooterColumn title="Programs">
+                <ul className="mt-4 flex flex-col gap-2.5">
+                  {footer.programs.map((link) => (
+                    <li key={link.label}>
+                      <FooterLink href={link.href}>{link.label}</FooterLink>
+                    </li>
+                  ))}
+                </ul>
+              </FooterColumn>
+
+              <FooterColumn title="Contact">
+                <ul className="mt-4 flex flex-col gap-3 text-sm text-neutral-500">
+                  <li>
+                    <span className="block text-neutral-600">Hours</span>
+                    <span className="mt-0.5 block text-neutral-400">
+                      {contact.hours}
+                    </span>
+                  </li>
+                  {contact.phones.map((phone) => (
+                    <li key={phone.href}>
+                      <a
+                        href={phone.href}
+                        className="transition-colors hover:text-white"
+                      >
+                        {phone.display}
+                      </a>
+                    </li>
+                  ))}
+                  <li>
+                    <a
+                      href={contact.email.href}
+                      className="break-all transition-colors hover:text-white"
+                    >
+                      {contact.email.display}
+                    </a>
+                  </li>
+                  <li className="leading-relaxed">{contact.address}</li>
+                </ul>
+              </FooterColumn>
+            </div>
           </div>
         </div>
 
-        {/* Main grid */}
-        <div className="grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8 lg:py-16">
-          {/* Brand */}
-          <div className="lg:col-span-4">
-            <a href="#hero" className="inline-flex items-center gap-3">
-              <Logo size="lg" />
-              <span className="flex flex-col">
-                <span className="text-[10px] font-semibold uppercase tracking-wide text-neutral-500">
-                  Yasir Ali Classes
-                </span>
-                <span className="text-sm font-bold leading-tight text-neutral-900">
-                  Aligarh
-                </span>
-              </span>
-            </a>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-neutral-600">
-              Premium coaching for school boards, university programs, and
-              entrance exams — trusted by students and parents across Aligarh
-              for over a decade.
-            </p>
-
-            <div className="mt-6 flex flex-wrap gap-3">
-              {socialLinks.map(({ label, href, icon: Icon, hover }) => (
-                <a
-                  key={label}
-                  href={href}
-                  aria-label={label}
-                  className={cn(
-                    "inline-flex size-10 items-center justify-center rounded-xl",
-                    "border border-zinc-200 bg-zinc-50 text-neutral-500",
-                    "transition-all duration-300",
-                    hover
-                  )}
-                >
-                  <Icon className="size-4" />
-                </a>
-              ))}
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div className="lg:col-span-2">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-neutral-900">
-              Quick Links
-            </h3>
-            <ul className="mt-4 flex flex-col gap-3">
-              {quickLinks.map((link) => (
-                <li key={link.href}>
-                  <FooterLink href={link.href}>{link.label}</FooterLink>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Courses */}
-          <div className="lg:col-span-3">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-neutral-900">
-              Our Courses
-            </h3>
-            <ul className="mt-4 flex flex-col gap-3">
-              {courseLinks.map((link) => (
-                <li key={link.label}>
-                  <FooterLink href={link.href}>{link.label}</FooterLink>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div className="lg:col-span-3">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-neutral-900">
-              Get in Touch
-            </h3>
-            <ul className="mt-4 flex flex-col gap-4">
-              <li className="flex items-start gap-3">
-                <span className="mt-0.5 inline-flex rounded-lg bg-yac-red/10 p-2 text-yac-red">
-                  <MapPin className="size-4" aria-hidden />
-                </span>
-                <div>
-                  <p className="text-xs font-medium text-neutral-500">Address</p>
-                  <p className="mt-0.5 text-sm text-neutral-700">
-                    Yasir Ali Classes, Aligarh, Uttar Pradesh
-                  </p>
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-0.5 inline-flex rounded-lg bg-yac-red/10 p-2 text-yac-red">
-                  <Phone className="size-4" aria-hidden />
-                </span>
-                <div>
-                  <p className="text-xs font-medium text-neutral-500">Phone</p>
-                  <a
-                    href="tel:+910000000000"
-                    className="mt-0.5 block text-sm text-neutral-700 transition-colors hover:text-yac-red"
-                  >
-                    +91 XXXXX XXXXX
-                  </a>
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-0.5 inline-flex rounded-lg bg-yac-red/10 p-2 text-yac-red">
-                  <Mail className="size-4" aria-hidden />
-                </span>
-                <div>
-                  <p className="text-xs font-medium text-neutral-500">Email</p>
-                  <a
-                    href="mailto:contact@yasiraliclasses.com"
-                    className="mt-0.5 block text-sm text-neutral-700 transition-colors hover:text-yac-red"
-                  >
-                    contact@yasiraliclasses.com
-                  </a>
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-0.5 inline-flex rounded-lg bg-yac-red/10 p-2 text-yac-red">
-                  <Clock className="size-4" aria-hidden />
-                </span>
-                <div>
-                  <p className="text-xs font-medium text-neutral-500">Hours</p>
-                  <p className="mt-0.5 text-sm text-neutral-700">
-                    Mon – Sat, 8:00 AM – 7:00 PM
-                  </p>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Bottom bar */}
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-zinc-200 py-6 text-center sm:flex-row sm:text-left">
-          <p className="text-xs text-neutral-500">
-            © {new Date().getFullYear()} Yasir Ali Classes. All rights reserved.
+        <div className="flex flex-col items-center justify-between gap-3 border-t border-white/10 py-6 text-center text-xs text-neutral-600 sm:flex-row sm:text-left">
+          <p>
+            © {year} {brand.name}. All rights reserved.
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-neutral-500">
-            <a href="#" className="transition-colors hover:text-neutral-900">
-              Privacy Policy
-            </a>
-            <span className="hidden text-neutral-300 sm:inline" aria-hidden>
-              ·
-            </span>
-            <a href="#" className="transition-colors hover:text-neutral-900">
-              Terms of Service
-            </a>
-            <span className="hidden text-neutral-300 sm:inline" aria-hidden>
-              ·
-            </span>
-            <a
-              href="#contact"
-              className="transition-colors hover:text-yac-red"
-            >
-              Contact Support
-            </a>
-          </div>
+          <p>{footer.tagline}</p>
+        </div>
+
+        <div className="flex flex-col items-center gap-3 border-t border-white/5 pb-8 pt-5 sm:flex-row sm:justify-center">
+          <a
+            href={footer.credits.authorHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[11px] font-semibold uppercase tracking-[0.2em] text-neutral-600 transition-colors hover:text-white"
+          >
+            {footer.credits.by}
+          </a>
+          <a
+            href={footer.credits.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center rounded-full border border-white/15 px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider text-neutral-300 transition-colors hover:border-white/30 hover:text-white"
+          >
+            {footer.credits.brandPrefix}
+            <span className="text-yac-red">{footer.credits.brandHighlight}</span>
+          </a>
         </div>
       </Container>
+
+      <FloatingCallButton />
     </footer>
   );
 }

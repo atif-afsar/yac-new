@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "../../lib/utils";
 
 const glowColorMap = {
@@ -24,11 +24,11 @@ const variantMap = {
     "--border-light-opacity": "1",
   },
   light: {
-    "--backdrop": "hsl(0 0% 100% / 0.92)",
+    "--backdrop": "hsl(0 0% 100% / 0.98)",
     "--backup-border": "hsl(0 0% 88% / 0.9)",
-    "--bg-spot-opacity": "0.12",
-    "--border-spot-opacity": "0.75",
-    "--border-light-opacity": "0.85",
+    "--bg-spot-opacity": "0.1",
+    "--border-spot-opacity": "0.7",
+    "--border-light-opacity": "0.8",
     "--saturation": "85",
     "--lightness": "55",
   },
@@ -45,91 +45,106 @@ function GlowCard({
   variant = "dark",
 }) {
   const cardRef = useRef(null);
+  const frameRef = useRef(0);
+  const activeRef = useRef(false);
+  const [glowEnabled, setGlowEnabled] = useState(false);
 
   useEffect(() => {
-    const syncPointer = (e) => {
-      const { clientX: x, clientY: y } = e;
+    const hoverMq = window.matchMedia("(hover: hover)");
+    const motionMq = window.matchMedia("(prefers-reduced-motion: no-preference)");
 
-      if (cardRef.current) {
-        cardRef.current.style.setProperty("--x", x.toFixed(2));
-        cardRef.current.style.setProperty(
-          "--xp",
-          (x / window.innerWidth).toFixed(2)
-        );
-        cardRef.current.style.setProperty("--y", y.toFixed(2));
-        cardRef.current.style.setProperty(
-          "--yp",
-          (y / window.innerHeight).toFixed(2)
-        );
-      }
+    const update = () => setGlowEnabled(hoverMq.matches && motionMq.matches);
+    update();
+
+    hoverMq.addEventListener("change", update);
+    motionMq.addEventListener("change", update);
+    return () => {
+      hoverMq.removeEventListener("change", update);
+      motionMq.removeEventListener("change", update);
     };
+  }, []);
 
-    document.addEventListener("pointermove", syncPointer);
-    return () => document.removeEventListener("pointermove", syncPointer);
+  const syncPointer = useCallback((e) => {
+    if (!activeRef.current || !cardRef.current) return;
+
+    cancelAnimationFrame(frameRef.current);
+    frameRef.current = requestAnimationFrame(() => {
+      const node = cardRef.current;
+      if (!node) return;
+
+      const rect = node.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      node.style.setProperty("--x", `${x}`);
+      node.style.setProperty("--y", `${y}`);
+      node.style.setProperty("--xp", (x / rect.width).toFixed(3));
+      node.style.setProperty(
+        "--yp",
+        (y / rect.height).toFixed(3)
+      );
+    });
+  }, []);
+
+  const handlePointerEnter = useCallback(() => {
+    activeRef.current = true;
+  }, []);
+
+  const handlePointerLeave = useCallback(() => {
+    activeRef.current = false;
+    cancelAnimationFrame(frameRef.current);
+  }, []);
+
+  useEffect(() => {
+    return () => cancelAnimationFrame(frameRef.current);
   }, []);
 
   const { base, spread } = glowColorMap[glowColor] ?? glowColorMap.red;
   const themeVars = variantMap[variant] ?? variantMap.dark;
 
-  const getSizeClasses = () => {
-    if (customSize) return "";
-    return sizeMap[size];
-  };
-
-  const getInlineStyles = () => {
-    const baseStyles = {
-      "--base": base,
-      "--spread": spread,
-      "--radius": "16",
-      "--border": "2",
-      "--size": "220",
-      "--outer": "1",
-      ...themeVars,
-      "--border-size": "calc(var(--border, 2) * 1px)",
-      "--spotlight-size": "calc(var(--size, 150) * 1px)",
-      "--hue": "calc(var(--base) + (var(--xp, 0) * var(--spread, 0)))",
-      backgroundImage: `radial-gradient(
-        var(--spotlight-size) var(--spotlight-size) at
-        calc(var(--x, 0) * 1px)
-        calc(var(--y, 0) * 1px),
-        hsl(var(--hue, 210) calc(var(--saturation, 100) * 1%) calc(var(--lightness, 70) * 1%) / var(--bg-spot-opacity, 0.1)), transparent
-      )`,
-      backgroundColor: "var(--backdrop, transparent)",
-      backgroundSize:
-        "calc(100% + (2 * var(--border-size))) calc(100% + (2 * var(--border-size)))",
-      backgroundPosition: "50% 50%",
-      backgroundAttachment: "fixed",
-      border: "var(--border-size) solid var(--backup-border)",
-      position: "relative",
-      touchAction: "none",
-    };
-
-    if (width !== undefined) {
-      baseStyles.width = typeof width === "number" ? `${width}px` : width;
-    }
-    if (height !== undefined) {
-      baseStyles.height = typeof height === "number" ? `${height}px` : height;
-    }
-
-    return baseStyles;
+  const baseStyles = {
+    "--base": base,
+    "--spread": spread,
+    "--radius": "16",
+    "--border": "2",
+    "--size": "200",
+    "--x": "50%",
+    "--y": "50%",
+    "--xp": "0.5",
+    "--yp": "0.5",
+    ...themeVars,
+    "--border-size": "calc(var(--border, 2) * 1px)",
+    "--spotlight-size": "calc(var(--size, 150) * 1px)",
+    "--hue": `calc(var(--base) + (var(--xp, 0.5) * var(--spread, 0)))`,
+    backgroundColor: "var(--backdrop, transparent)",
+    border: "var(--border-size) solid var(--backup-border)",
+    ...(width !== undefined && {
+      width: typeof width === "number" ? `${width}px` : width,
+    }),
+    ...(height !== undefined && {
+      height: typeof height === "number" ? `${height}px` : height,
+    }),
   };
 
   return (
     <div
       ref={cardRef}
-      data-glow
-      style={getInlineStyles()}
+      data-glow={glowEnabled ? "" : undefined}
+      data-glow-static={!glowEnabled ? "" : undefined}
+      style={baseStyles}
+      onPointerEnter={glowEnabled ? handlePointerEnter : undefined}
+      onPointerLeave={glowEnabled ? handlePointerLeave : undefined}
+      onPointerMove={glowEnabled ? syncPointer : undefined}
       className={cn(
-        getSizeClasses(),
+        customSize ? "" : sizeMap[size],
         !customSize && "aspect-[3/4]",
-        "relative rounded-2xl shadow-[0_1rem_2rem_-1rem_rgba(0,0,0,0.15)] backdrop-blur-[6px]",
+        "relative rounded-2xl shadow-sm",
         customSize
           ? "flex h-full w-full flex-col p-5 sm:p-6"
           : "grid grid-rows-[1fr_auto] gap-4 p-4",
         className
       )}
     >
-      <div data-glow aria-hidden />
       {children}
     </div>
   );

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import { useLenis } from "lenis/react";
 import { Menu, X, ChevronRight } from "lucide-react";
 import Container from "./Container";
 import Logo from "./Logo";
@@ -118,15 +119,20 @@ function NavCursor({ position }) {
 }
 
 function MobileSidebar({ open, onClose }) {
-  // Lock page scroll while the sidebar is open
+  const lenis = useLenis();
+
   useEffect(() => {
     if (!open) return;
+
+    lenis?.stop();
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+
     return () => {
+      lenis?.start();
       document.body.style.overflow = prev;
     };
-  }, [open]);
+  }, [open, lenis]);
 
   useEffect(() => {
     if (!open) return;
@@ -138,106 +144,100 @@ function MobileSidebar({ open, onClose }) {
   }, [open, onClose]);
 
   return (
-    <AnimatePresence>
-      {open && (
-        <>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[60] bg-zinc-900/45 backdrop-blur-[2px] md:hidden"
-            onClick={onClose}
-            aria-hidden="true"
-          />
+    <>
+      <div
+        className={cx(
+          "fixed inset-0 z-[60] bg-zinc-900/55 transition-opacity duration-200 md:hidden",
+          "motion-reduce:transition-none",
+          open ? "opacity-100" : "pointer-events-none opacity-0"
+        )}
+        onClick={onClose}
+        aria-hidden="true"
+      />
 
-          <motion.aside
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", bounce: 0, duration: 0.4 }}
+      <aside
+        className={cx(
+          "fixed right-0 top-0 z-[70] flex h-dvh w-[78vw] max-w-xs flex-col",
+          "border-l border-zinc-200 bg-white shadow-2xl md:hidden",
+          "transform-gpu transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]",
+          "motion-reduce:transition-none",
+          open ? "translate-x-0" : "pointer-events-none translate-x-full"
+        )}
+        data-lenis-prevent
+        role="dialog"
+        aria-modal="true"
+        aria-hidden={!open}
+        aria-label="Mobile navigation"
+      >
+        <div className="flex items-center justify-between border-b border-zinc-200/80 px-4 py-4">
+          <div className="flex items-center gap-2.5">
+            <Logo size="md" />
+            <span className="flex min-w-0 flex-col">
+              <span className="text-[10px] font-semibold uppercase tracking-wide text-zinc-500">
+                Yasir Ali Classes
+              </span>
+              <span className="text-sm font-bold leading-tight text-zinc-900">
+                Aligarh
+              </span>
+            </span>
+          </div>
+          <button
+            type="button"
             className={cx(
-              "fixed right-0 top-0 z-[70] flex h-dvh w-[78vw] max-w-xs flex-col",
-              "border-l border-zinc-200 bg-white shadow-2xl md:hidden"
+              "rounded-lg border border-zinc-200 bg-white p-2 text-zinc-600",
+              "transition-colors hover:bg-zinc-100 hover:text-zinc-900",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yac-red"
             )}
-            data-lenis-prevent
-            role="dialog"
-            aria-modal="true"
-            aria-label="Mobile navigation"
+            aria-label="Close menu"
+            onClick={onClose}
           >
-            <div className="flex items-center justify-between border-b border-zinc-200/80 px-4 py-4">
-              <div className="flex items-center gap-2.5">
-                <Logo size="md" />
-                <span className="flex min-w-0 flex-col">
-                  <span className="text-[10px] font-semibold uppercase tracking-wide text-zinc-500">
-                    Yasir Ali Classes
-                  </span>
-                  <span className="text-sm font-bold leading-tight text-zinc-900">
-                    Aligarh
-                  </span>
-                </span>
-              </div>
-              <button
-                type="button"
-                className={cx(
-                  "rounded-lg border border-zinc-200 bg-white p-2 text-zinc-600",
-                  "transition-colors hover:bg-zinc-100 hover:text-zinc-900",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yac-red"
-                )}
-                aria-label="Close menu"
-                onClick={onClose}
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
+            <X className="h-5 w-5" />
+          </button>
+        </div>
 
-            <nav className="flex-1 overflow-y-auto px-3 py-4" aria-label="Mobile">
-              <ul className="flex flex-col gap-1">
-                {navLinks.map((link, index) => (
-                  <motion.li
-                    key={link.href}
-                    initial={{ opacity: 0, x: 16 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.05 + index * 0.04, duration: 0.25 }}
-                  >
-                    <a
-                      href={link.href}
-                      className={cx(
-                        "flex items-center justify-between rounded-xl px-3.5 py-3",
-                        "text-sm font-semibold text-zinc-800",
-                        "transition-colors hover:bg-zinc-50 hover:text-yac-red active:bg-zinc-100"
-                      )}
-                      onClick={onClose}
-                    >
-                      {link.label}
-                      <ChevronRight className="h-4 w-4 text-zinc-300" aria-hidden="true" />
-                    </a>
-                  </motion.li>
-                ))}
-              </ul>
-            </nav>
+        <nav className="flex-1 overflow-y-auto overscroll-contain px-3 py-4" aria-label="Mobile">
+          <ul className="flex flex-col gap-1">
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  className={cx(
+                    "flex items-center justify-between rounded-xl px-3.5 py-3",
+                    "text-sm font-semibold text-zinc-800",
+                    "transition-colors hover:bg-zinc-50 hover:text-yac-red active:bg-zinc-100"
+                  )}
+                  onClick={onClose}
+                >
+                  {link.label}
+                  <ChevronRight
+                    className="h-4 w-4 text-zinc-300"
+                    aria-hidden="true"
+                  />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
 
-            <div className="border-t border-zinc-200/80 p-4">
-              <a
-                href="#cta"
-                className={cx(
-                  "flex w-full items-center justify-center rounded-xl px-5 py-3.5",
-                  "text-sm font-semibold text-white bg-yac-red",
-                  "shadow-[0_4px_14px_rgba(220,38,38,0.35)]",
-                  "transition-all hover:bg-yac-red/90 active:scale-[0.98]"
-                )}
-                onClick={onClose}
-              >
-                Join Now
-              </a>
-              <p className="mt-3 text-center text-[11px] font-medium text-zinc-400">
-                Commerce &amp; Entrance Coaching, Aligarh
-              </p>
-            </div>
-          </motion.aside>
-        </>
-      )}
-    </AnimatePresence>
+        <div className="border-t border-zinc-200/80 p-4">
+          <a
+            href="#cta"
+            className={cx(
+              "flex w-full items-center justify-center rounded-xl px-5 py-3.5",
+              "text-sm font-semibold text-white bg-yac-red",
+              "shadow-[0_4px_14px_rgba(220,38,38,0.35)]",
+              "transition-all hover:bg-yac-red/90 active:scale-[0.98]"
+            )}
+            onClick={onClose}
+          >
+            Join Now
+          </a>
+          <p className="mt-3 text-center text-[11px] font-medium text-zinc-400">
+            Commerce &amp; Entrance Coaching, Aligarh
+          </p>
+        </div>
+      </aside>
+    </>
   );
 }
 
@@ -259,15 +259,15 @@ export default function Navbar() {
         >
           <a
             href="#hero"
-            className="flex shrink-0 items-center gap-2.5"
+            className="flex min-w-0 flex-1 items-center gap-2 sm:flex-initial sm:gap-2.5"
             onClick={() => setMobileOpen(false)}
           >
             <Logo size="md" />
-            <span className="hidden min-w-0 flex-col sm:flex">
-              <span className="text-[10px] font-semibold uppercase tracking-wide text-zinc-500">
+            <span className="flex min-w-0 flex-col leading-tight">
+              <span className="truncate text-[10px] font-semibold uppercase tracking-wide text-zinc-500">
                 Yasir Ali Classes
               </span>
-              <span className="text-sm font-bold leading-tight text-zinc-900">
+              <span className="truncate text-xs font-bold text-zinc-900 sm:text-sm">
                 Aligarh
               </span>
             </span>

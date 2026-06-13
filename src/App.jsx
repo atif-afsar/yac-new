@@ -12,30 +12,27 @@ import CTA from "./components/sections/CTA";
 import Contact from "./components/sections/Contact";
 import Footer from "./components/sections/Footer";
 
-function App() {
-  return (
-    <>
+function App() {  return (
+    <ReactLenis root options={{ lerp: 0.08, smoothWheel: true, anchors: true }}>
       <Navbar />
-      <ReactLenis root options={{ lerp: 0.08, smoothWheel: true, anchors: true }}>
-        <div className="relative min-h-screen w-full overflow-x-clip">
-          <ParticleBackground />
+      <div className="relative min-h-screen w-full overflow-x-clip">
+        <ParticleBackground />
 
-          <div className="relative z-10 w-full overflow-x-clip">
-            <main className="w-full overflow-x-clip">
-              <Hero />
-              <About />
-              <Courses />
-              <Results />
-              <WhyChooseUs />
-              <Testimonials />
-              <CTA />
-              <Contact />
-            </main>
-            <Footer />
-          </div>
+        <div className="relative z-10 w-full overflow-x-clip">
+          <main className="w-full overflow-x-clip">
+            <Hero />
+            <About />
+            <Courses />
+            <Results />
+            <WhyChooseUs />
+            <Testimonials />
+            <CTA />
+            <Contact />
+          </main>
+          <Footer />
         </div>
-      </ReactLenis>
-    </>
+      </div>
+    </ReactLenis>
   );
 }
 

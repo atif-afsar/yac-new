@@ -83,62 +83,104 @@
   }
 }
 
-/* Spotlight glow cards — pointer-reactive border & surface highlight */
-[data-glow]::before,
+/* Footer — giant YAC mark with red hover fill */
+.footer-yac-mark {
+  --yac-fill: #dc2626;
+}
+
+.footer-yac-text {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.14);
+  background-image: linear-gradient(to right, var(--yac-fill), var(--yac-fill));
+  background-size: 32% 100%;
+  background-repeat: no-repeat;
+  background-position: left center;
+  -webkit-background-clip: text;
+  background-clip: text;
+  transition:
+    background-size 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    -webkit-text-stroke-color 0.5s ease,
+    filter 0.5s ease;
+}
+
+/* Mobile — always full red (no hover on touch) */
+@media (max-width: 767px) {
+  .footer-yac-text {
+    color: var(--yac-fill);
+    -webkit-text-stroke-color: transparent;
+    background-image: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+    filter: drop-shadow(0 0 28px rgba(220, 38, 38, 0.35));
+  }
+}
+
+@media (hover: hover) and (min-width: 768px) {
+  .footer-yac-mark:hover .footer-yac-text,
+  .footer-yac-mark:focus-visible .footer-yac-text {
+    background-size: 100% 100%;
+    -webkit-text-stroke-color: transparent;
+    filter: drop-shadow(0 0 48px rgba(220, 38, 38, 0.45));
+  }
+}
+
+/* Spotlight glow cards — hover-only, card-local coords (no fixed attachment) */
+[data-glow]::before {
+  pointer-events: none;
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: calc(var(--radius) * 1px);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  background: radial-gradient(
+    calc(var(--spotlight-size) * 0.9) calc(var(--spotlight-size) * 0.9) at
+      var(--x, 50%) var(--y, 50%),
+    hsl(
+        var(--hue, 0) calc(var(--saturation, 100) * 1%)
+          calc(var(--lightness, 55) * 1%) / var(--bg-spot-opacity, 0.1)
+      ),
+    transparent 70%
+  );
+}
+
+[data-glow]:hover::before {
+  opacity: 1;
+}
+
 [data-glow]::after {
   pointer-events: none;
   content: "";
   position: absolute;
   inset: calc(var(--border-size) * -1);
-  border: var(--border-size) solid transparent;
   border-radius: calc(var(--radius) * 1px);
-  background-attachment: fixed;
-  background-size: calc(100% + (2 * var(--border-size)))
-    calc(100% + (2 * var(--border-size)));
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-  mask: linear-gradient(transparent, transparent),
-    linear-gradient(white, white);
-  mask-clip: padding-box, border-box;
-  mask-composite: intersect;
-}
-
-[data-glow]::before {
-  background-image: radial-gradient(
-    calc(var(--spotlight-size) * 0.75) calc(var(--spotlight-size) * 0.75) at
-      calc(var(--x, 0) * 1px) calc(var(--y, 0) * 1px),
+  padding: var(--border-size);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  background: radial-gradient(
+    calc(var(--spotlight-size) * 0.55) calc(var(--spotlight-size) * 0.55) at
+      var(--x, 50%) var(--y, 50%),
     hsl(
-        var(--hue, 210) calc(var(--saturation, 100) * 1%)
-          calc(var(--lightness, 50) * 1%) / var(--border-spot-opacity, 1)
+        var(--hue, 0) calc(var(--saturation, 100) * 1%)
+          calc(var(--lightness, 50) * 1%) / var(--border-spot-opacity, 0.8)
       ),
-    transparent 100%
+    transparent 70%
   );
-  filter: brightness(2);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
 }
 
-[data-glow]::after {
-  background-image: radial-gradient(
-    calc(var(--spotlight-size) * 0.5) calc(var(--spotlight-size) * 0.5) at
-      calc(var(--x, 0) * 1px) calc(var(--y, 0) * 1px),
-    hsl(0 100% 100% / var(--border-light-opacity, 1)),
-    transparent 100%
-  );
+[data-glow]:hover::after {
+  opacity: 1;
 }
 
-[data-glow] [data-glow] {
-  position: absolute;
-  inset: 0;
-  will-change: filter;
-  opacity: var(--outer, 1);
-  border-radius: calc(var(--radius) * 1px);
-  border-width: calc(var(--border-size) * 20);
-  filter: blur(calc(var(--border-size) * 10));
-  background: none;
-  pointer-events: none;
-  border: none;
+/* Touch / reduced-motion — static card, no glow layers */
+[data-glow-static] {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-[data-glow] > [data-glow]::before {
-  inset: -10px;
-  border-width: 10px;
+[data-glow-static]:active {
+  border-color: hsl(0 85% 55% / 0.35);
+  box-shadow: 0 4px 16px rgba(220, 38, 38, 0.08);
 }

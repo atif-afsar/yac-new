@@ -12,6 +12,7 @@ import Container from "../common/Container";
 import SectionHeading from "../common/SectionHeading";
 import RevealAnimation from "../animations/RevealAnimation";
 import { cn } from "../../lib/utils";
+import { getContactCards, siteConfig } from "../../data/site";
 
 const courseOptions = [
   "Classes 5–10",
@@ -32,30 +33,16 @@ const classOptions = [
   "Entrance Aspirant",
 ];
 
-const contactInfo = [
-  {
-    icon: MapPin,
-    label: "Visit Us",
-    value: "Yasir Ali Classes, Aligarh, Uttar Pradesh",
-  },
-  {
-    icon: Phone,
-    label: "Call Us",
-    value: "+91 XXXXX XXXXX",
-    href: "tel:+910000000000",
-  },
-  {
-    icon: Mail,
-    label: "Email",
-    value: "contact@yasiraliclasses.com",
-    href: "mailto:contact@yasiraliclasses.com",
-  },
-  {
-    icon: Clock,
-    label: "Office Hours",
-    value: "Mon – Sat, 8:00 AM – 7:00 PM",
-  },
-];
+const contactIconMap = {
+  address: MapPin,
+  email: Mail,
+  hours: Clock,
+};
+
+const contactInfo = getContactCards().map((item) => ({
+  ...item,
+  icon: contactIconMap[item.id] ?? Phone,
+}));
 
 const initialForm = {
   name: "",
@@ -91,6 +78,8 @@ const inputClass = cn(
 export default function Contact() {
   const [form, setForm] = useState(initialForm);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [errors, setErrors] = useState({});
 
   const update = (field) => (e) => {
@@ -113,15 +102,59 @@ export default function Contact() {
     return next;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const next = validate();
     if (Object.keys(next).length > 0) {
       setErrors(next);
       return;
     }
-    setSubmitted(true);
-    setForm(initialForm);
+
+    const { recipient, subject } = siteConfig.contact.form;
+
+    setSubmitting(true);
+    setSubmitError("");
+
+    try {
+      const response = await fetch(
+        `https://formsubmit.co/ajax/${encodeURIComponent(recipient)}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            name: form.name.trim(),
+            phone: form.phone.trim(),
+            email: form.email.trim() || "Not provided",
+            course: form.course,
+            studentClass: form.studentClass || "Not provided",
+            message: form.message.trim(),
+            _subject: subject,
+            _template: "table",
+            _captcha: "false",
+            ...(form.email.trim() && { _replyto: form.email.trim() }),
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Unable to send enquiry.");
+      }
+
+      setSubmitted(true);
+      setForm(initialForm);
+      setErrors({});
+    } catch {
+      setSubmitError(
+        "Something went wrong. Please try again or call us directly."
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -152,9 +185,9 @@ export default function Contact() {
         <div className="mt-12 grid gap-8 lg:mt-16 lg:grid-cols-5 lg:gap-10">
           <RevealAnimation className="lg:col-span-2" delay={0.05}>
             <div className="flex h-full flex-col gap-4">
-              {contactInfo.map(({ icon: Icon, label, value, href }) => (
+              {contactInfo.map(({ id, icon: Icon, label, value, href }) => (
                 <div
-                  key={label}
+                  key={id}
                   className="group flex items-start gap-4 rounded-2xl border border-neutral-200/80 bg-white p-5 shadow-sm transition-all duration-300 hover:border-yac-red/30 hover:shadow-md"
                 >
                   <div className="inline-flex rounded-xl bg-yac-red/10 p-3 text-yac-red transition-colors group-hover:bg-yac-red group-hover:text-white">
@@ -185,8 +218,15 @@ export default function Contact() {
                   Quick Admission Enquiry
                 </p>
                 <p className="mt-1 text-sm leading-relaxed text-neutral-600">
-                  Prefer talking directly? Call us during office hours or visit
-                  our Aligarh campus for a free counselling session.
+                  Prefer talking directly? Call{" "}
+                  <a
+                    href={siteConfig.contact.phones[0].href}
+                    className="font-medium text-yac-red hover:underline"
+                  >
+                    {siteConfig.contact.phones[0].display}
+                  </a>{" "}
+                  during office hours or visit our {siteConfig.brand.location}{" "}
+                  campus for a free counselling session.
                 </p>
               </div>
             </div>
@@ -208,7 +248,10 @@ export default function Contact() {
                   </p>
                   <button
                     type="button"
-                    onClick={() => setSubmitted(false)}
+                    onClick={() => {
+                      setSubmitted(false);
+                      setSubmitError("");
+                    }}
                     className="mt-6 text-sm font-semibold text-yac-red transition-colors hover:text-yac-red/80"
                   >
                     Submit another enquiry
@@ -216,6 +259,15 @@ export default function Contact() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} noValidate className="space-y-5">
+                  {submitError && (
+                    <p
+                      role="alert"
+                      className="rounded-xl border border-yac-red/25 bg-yac-red/5 px-4 py-3 text-sm text-yac-red"
+                    >
+                      {submitError}
+                    </p>
+                  )}
+
                   <div className="grid gap-5 sm:grid-cols-2">
                     <Field label="Full Name" id="name" required>
                       <div className="relative">
@@ -249,7 +301,7 @@ export default function Contact() {
                           type="tel"
                           value={form.phone}
                           onChange={update("phone")}
-                          placeholder="+91 XXXXX XXXXX"
+                          placeholder={siteConfig.contact.phones[0].display}
                           className={cn(inputClass, "pl-10")}
                           aria-invalid={!!errors.phone}
                         />
@@ -350,16 +402,18 @@ export default function Contact() {
 
                   <button
                     type="submit"
+                    disabled={submitting}
                     className={cn(
                       "inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5",
                       "text-sm font-semibold text-white sm:text-base",
                       "bg-yac-red shadow-[0_4px_14px_rgba(220,38,38,0.35)]",
                       "transition-all hover:bg-yac-red/90 active:scale-[0.98]",
-                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yac-red focus-visible:ring-offset-2"
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yac-red focus-visible:ring-offset-2",
+                      "disabled:cursor-not-allowed disabled:opacity-70"
                     )}
                   >
                     <Send className="size-4" aria-hidden />
-                    Send Enquiry
+                    {submitting ? "Sending..." : "Send Enquiry"}
                   </button>
                 </form>
               )}

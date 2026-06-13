@@ -45,11 +45,15 @@ export default function Testimonials() {
           </p>
         </motion.div>
 
-        <div className="mx-auto mt-10 flex max-h-[740px] justify-center gap-6 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)]">
-          <TestimonialsColumn testimonials={firstColumn} duration={15} />
+        <div className="mx-auto mt-10 flex max-h-[min(68vh,580px)] justify-center gap-3 overflow-hidden md:max-h-[740px] md:gap-6 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)]">
+          <TestimonialsColumn
+            testimonials={firstColumn}
+            className="min-w-0 flex-1 md:flex-none"
+            duration={15}
+          />
           <TestimonialsColumn
             testimonials={secondColumn}
-            className="hidden md:block"
+            className="min-w-0 flex-1 md:flex-none"
             duration={19}
           />
           <TestimonialsColumn
