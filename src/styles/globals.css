@@ -79,6 +79,15 @@
     content-visibility: auto;
     contain-intrinsic-size: auto 100vh;
   }
+
+  /* YAC scan loader */
+  .animate-scan {
+    animation: scan 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
+  }
+
+  .animate-cut {
+    animation: cut 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
+  }
 }
 
 @keyframes testimonial-scroll-up {
@@ -93,6 +102,41 @@
 @media (prefers-reduced-motion: reduce) {
   .animate-testimonial-scroll {
     animation: none;
+  }
+
+  .animate-scan,
+  .animate-cut {
+    animation: none;
+  }
+}
+
+@keyframes scan {
+  0% {
+    top: 0;
+  }
+  25% {
+    top: 1.08em;
+  }
+  50% {
+    top: 0;
+  }
+  75% {
+    top: 1.08em;
+  }
+}
+
+@keyframes cut {
+  0% {
+    clip-path: inset(0 0 0 0);
+  }
+  25% {
+    clip-path: inset(100% 0 0 0);
+  }
+  50% {
+    clip-path: inset(0 0 100% 0);
+  }
+  75% {
+    clip-path: inset(0 0 0 0);
   }
 }
 

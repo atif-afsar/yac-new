@@ -4,6 +4,7 @@ import "lenis/dist/lenis.css";
 import MotionProvider from "./components/motion/MotionProvider";
 import SEOHead from "./components/seo/SEOHead";
 import StructuredData from "./components/seo/StructuredData";
+import PageLoader from "./components/ui/page-loader";
 import Navbar from "./components/common/Navbar";
 import ParticleBackground from "./components/animations/ParticleBackground";
 import Hero from "./components/sections/Hero";
@@ -20,6 +21,7 @@ const Footer = lazy(() => import("./components/sections/Footer"));
 function App() {
   return (
     <MotionProvider>
+      <PageLoader />
       <SEOHead />
       <StructuredData />
       <ReactLenis root options={{ lerp: 0.08, smoothWheel: true, anchors: true }}>

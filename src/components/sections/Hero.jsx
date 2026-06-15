@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { m, useInView } from "framer-motion";
 import { ArrowRight, Play, Star } from "lucide-react";
 import Container from "../common/Container";
@@ -64,8 +64,6 @@ const stats = [
   { end: 1200, suffix: "+", label: "Students Enrolled" },
 ];
 
-const layoutSpring = { duration: 1.5, type: "spring" };
-
 function AnimatedCounter({ end, suffix, duration = 1.8 }) {
   const ref = useRef(null);
   const valueRef = useRef(null);
@@ -97,34 +95,8 @@ function AnimatedCounter({ end, suffix, duration = 1.8 }) {
   );
 }
 
-const GridSquare = memo(function GridSquare({ sq }) {
-  return (
-    <m.div
-      layout="position"
-      transition={{ layout: layoutSpring }}
-      style={gpuLayerStyle}
-      className="relative h-full w-full transform-gpu overflow-hidden rounded-lg border border-zinc-900/10 md:rounded-md md:shadow-[3px_3px_0_0_rgba(24,24,27,0.25)]"
-    >
-      <img
-        src={sq.src}
-        alt={sq.alt}
-        loading="lazy"
-        decoding="async"
-        className="absolute inset-0 h-full w-full object-cover object-center"
-      />
-      <div className="absolute inset-0 bg-yac-red/15 mix-blend-multiply" aria-hidden="true" />
-      <div
-        className="absolute inset-0 bg-gradient-to-t from-zinc-900/25 to-transparent"
-        aria-hidden="true"
-      />
-    </m.div>
-  );
-});
-
 function generateSquares(count = 16) {
-  return shuffle(squareData)
-    .slice(0, count)
-    .map((sq) => <GridSquare key={sq.id} sq={sq} />);
+  return shuffle(squareData).slice(0, count);
 }
 
 function useGridSize() {
@@ -217,7 +189,27 @@ function ShuffleGrid() {
           )}
           aria-hidden="true"
         >
-          {squares}
+          {squares.map((sq) => (
+            <m.div
+              key={sq.id}
+              layout
+              transition={{ duration: 1.5, type: "spring" }}
+              className="relative h-full w-full overflow-hidden rounded-lg border border-zinc-900/10 md:rounded-md md:shadow-[3px_3px_0_0_rgba(24,24,27,0.25)]"
+            >
+              <img
+                src={sq.src}
+                alt={sq.alt}
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 h-full w-full object-cover object-center"
+              />
+              <div className="absolute inset-0 bg-yac-red/15 mix-blend-multiply" aria-hidden="true" />
+              <div
+                className="absolute inset-0 bg-gradient-to-t from-zinc-900/25 to-transparent"
+                aria-hidden="true"
+              />
+            </m.div>
+          ))}
         </div>
       </div>
 
@@ -365,7 +357,6 @@ function MobileHero({ motionProps, prefersReducedMotion }) {
       <m.div
         {...motionProps}
         transition={delay(0.35)}
-        style={gpuLayerStyle}
         className="mt-8 w-full"
       >
         <ShuffleGrid />
@@ -495,7 +486,6 @@ export default function Hero() {
           <m.div
             {...motionProps}
             transition={{ ...fadeUp.transition, delay: prefersReducedMotion ? 0 : 0.3 }}
-            style={gpuLayerStyle}
             className="order-2 min-w-0 w-full md:order-2"
           >
             <ShuffleGrid />

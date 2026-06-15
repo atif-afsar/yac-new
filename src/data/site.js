@@ -63,12 +63,12 @@ export const siteConfig = {
       { label: "Admissions", href: "#cta" },
     ],
     programs: [
-      { label: "Commerce Coaching Aligarh", href: "#courses" },
-      { label: "Class 11 & 12 Commerce", href: "#courses" },
-      { label: "Accounts Coaching Aligarh", href: "#courses" },
-      { label: "CUET Commerce Coaching", href: "#courses" },
-      { label: "AMU Entrance Coaching", href: "#courses" },
-      { label: "MBA Entrance & GD-PI Coaching", href: "#courses" },
+      { label: "Commerce Coaching Aligarh", href: "/commerce-coaching-aligarh" },
+      { label: "Class 11 & 12 Commerce", href: "/best-commerce-coaching-aligarh" },
+      { label: "Accounts Coaching Aligarh", href: "/accounts-coaching-aligarh" },
+      { label: "CUET Commerce Coaching", href: "/cuet-coaching-aligarh" },
+      { label: "AMU Entrance Coaching", href: "/amu-entrance-coaching-aligarh" },
+      { label: "MBA Entrance & GD-PI Coaching", href: "/mba-entrance-coaching-aligarh" },
     ],
     tagline: "Built for students across India — Online & Offline Learning",
     credits: {

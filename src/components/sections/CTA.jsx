@@ -4,6 +4,7 @@ import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 import { GraduationCap, Phone, Sparkles } from "lucide-react";
 import Container from "../common/Container";
 import { InteractiveRobotSpline } from "../ui/interactive-3d-robot";
+import { siteConfig } from "../../data/site";
 import { cn } from "../../lib/utils";
 
 const ROBOT_SCENE_URL =
@@ -74,7 +75,7 @@ export default function CTA() {
 
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                   <a
-                    href="tel:+910000000000"
+                    href={siteConfig.contact.primaryPhone}
                     className={cn(
                       "inline-flex w-full items-center justify-center rounded-lg px-6 py-3",
                       "text-sm font-semibold text-white sm:w-auto md:text-base",
